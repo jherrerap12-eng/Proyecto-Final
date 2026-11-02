@@ -4,7 +4,7 @@ Aplicación administrativa interna de juguetes vendidos mediante lives y WhatsAp
 
 ## Estado real
 
-Laravel 12 con autenticación, inventario por pieza y clientes integrados en main. Esta rama feature/pedidos añade borradores, reservas temporales/firmes, mínimo 25 % verificado, cancelación/regreso físico, búsquedas Fetch e historial. Incluye base de datos compartida de pagos, pero no sus formularios/operaciones ni entregas completas. Sin cuentas predeterminadas ni registro público. Ver [CHECKLIST.md](CHECKLIST.md), [clientes](documentacion/CLIENTES.md), [inventario](documentacion/INVENTARIO.md), [pedidos](documentacion/PEDIDOS_Y_RESERVAS.md) y [contrato de pagos](documentacion/CONTRATO_PAGOS.md).
+Laravel 12 con autenticación, inventario por pieza y clientes integrados en main. La rama integracion/pedidos-pagos reúne pedidos/reservas más registro/verificación de pagos, mínimo 25 %, cancelación/regreso físico, saldos, búsquedas e historial. El encargado autorizó el commit/publicación de esta rama; main todavía no contiene la integración y queda pendiente revisar e integrar su PR. Sin cuentas predeterminadas ni registro público. Ver [CHECKLIST.md](CHECKLIST.md), [clientes](documentacion/CLIENTES.md), [inventario](documentacion/INVENTARIO.md), [pedidos](documentacion/PEDIDOS_Y_RESERVAS.md) y [guía de integración](documentacion/INTEGRACION_PEDIDOS_PAGOS.md).
 
 ## Herramientas
 
@@ -87,6 +87,8 @@ vendor\bin\pint --test
 Comprueba formato PHP sin modificar archivos. `vendor\bin\pint` aplica formato; revisar después los cambios.
 
 ## Documentación
+
+[Pagos: preparación y contrato de integración con pedidos](documentacion/PAGOS.md). La pantalla está disponible; el registro de abonos requiere integrar pedidos y su clave foránea.
 
 [Colaboración](CONTRIBUTING.md), [PRD](documentacion/PRD.md), [Reglas](documentacion/REGLAS_NEGOCIO.md), [Arquitectura y DER](documentacion/ARQUITECTURA.md), [Backlog](documentacion/BACKLOG.md), [GitHub](documentacion/GITHUB.md), [Verificación](documentacion/VERIFICACION.md).
 

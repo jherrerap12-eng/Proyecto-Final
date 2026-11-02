@@ -17,6 +17,7 @@ erDiagram
     PRODUCTO ||--o{ MOVIMIENTO_INVENTARIO : registra
     DETALLE_PEDIDO ||--o{ RESERVA : origina
     PEDIDO ||--o{ PAGO : recibe
+    USER ||--o{ PAGO : registra
     PEDIDO ||--o{ HISTORIAL_ESTADO : conserva
     PEDIDO ||--o{ ENVIO : gestiona
 ```
@@ -35,6 +36,6 @@ Además de las tablas estándar Laravel, existen `productos` y `movimientos_inve
 
 Cliente 1:N Pedido; Pedido 1:N DetallePedido/Reserva/EventoPedido/Pago. Cada detalle representa una pieza y conserva código/nombre/costo/precio. Una reserva retiene producto_id histórico y producto_bloqueado_id nullable único para bloquear disponibilidad. Confirmación/cancelación/devolución transaccionales con bloqueos y orden consistente. Mínimo histórico del 25 % por pedido y cálculo en centavos enteros.
 
-La tabla/modelo Pago es contrato compartido; su interfaz, registro/verificación y ciclo de entregas se desarrollarán aparte. Ver PEDIDOS_Y_RESERVAS.md y CONTRATO_PAGOS.md. El diagrama conceptual anterior conserva Envio/HISTORIAL_ESTADO como entidades futuras: historial comercial actual usa eventos_pedido.
+Pago es contrato compartido: su interfaz, registro y verificación están adaptados en la rama de integración. Usa monto/fecha_pago, verificación con actor, saldo calculado y compatibilidad de esquema legacy. Ver INTEGRACION_PEDIDOS_PAGOS.md. Reembolsos/anulaciones y ciclo completo de entregas siguen pendientes. El diagrama conceptual conserva Envio/HISTORIAL_ESTADO como entidades futuras; el historial comercial actual usa eventos_pedido.
 
 Pruebas de acceso/reglas: SQLite en memoria. Concurrencia de inventario y pedidos comprobada con conexiones independientes MariaDB e InnoDB sobre tablas clonadas aisladas. MySQL 8 todavía no probado.

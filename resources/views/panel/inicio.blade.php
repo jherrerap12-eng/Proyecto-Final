@@ -17,6 +17,9 @@
         <h2 class="h4 mt-4">Pedidos y reservas</h2>
         <p class="text-secondary">Selecciona un cliente, reúne sus juguetes y confirma la reserva.</p>
         <a href="{{ route('pedidos.listar') }}" class="btn btn-primary">Abrir pedidos</a>
+        <h2 class="h4 mt-4">Pagos y saldos</h2>
+        <p class="text-secondary">Registra abonos, verifica los recibidos y consulta el saldo de cada pedido.</p>
+        <a href="{{ route('pagos.index') }}" class="btn btn-primary">Abrir pagos</a>
     </div>
 </div>
 @endsection

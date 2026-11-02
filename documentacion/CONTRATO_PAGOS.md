@@ -1,6 +1,6 @@
 # Integración para el compañero — pagos
 
-La base compartida está en feature/pedidos. Revisar e integrar esa rama primero; luego actualizar main y crear feature/pagos. No crear otra tabla pedidos/pagos ni duplicar migraciones. Esta estructura no acredita que las operaciones de pagos ya estén implementadas.
+El contrato se implementó al preparar la unión de feature/pedidos y feature/pagos en `integracion/pedidos-pagos`. Registro, verificación, consultas y promoción de reserva están adaptados y probados; revisión manual, commit/publicación y PR pendientes. No duplicar tablas ni integrar la versión antigua de pagos sin las adaptaciones. Ver INTEGRACION_PEDIDOS_PAGOS.md.
 
 ## Modelo Pago y tabla pagos
 

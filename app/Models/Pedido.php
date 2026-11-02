@@ -43,9 +43,14 @@ class Pedido extends Model
         return $this->hasMany(EventoPedido::class, 'pedido_id');
     }
 
-    public function pagadoCentavos(): int
+    public function pagadoCentavos(bool $bloquear = false): int
     {
-        return $this->pagos()->whereNotNull('verificado_en')->whereNotNull('verificado_por')->whereNull('anulado_en')->get()->sum(fn (Pago $pago) => Importes::aCentavos($pago->monto));
+        $consulta = $this->pagos()->whereNotNull('verificado_en')->whereNotNull('verificado_por')->whereNull('anulado_en');
+        if ($bloquear) {
+            $consulta->lockForUpdate();
+        }
+
+        return $consulta->get()->sum(fn (Pago $pago) => Importes::aCentavos($pago->monto));
     }
 
     public function depositoMinimoCentavos(): int

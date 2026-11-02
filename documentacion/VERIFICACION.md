@@ -1,5 +1,13 @@
 # Verificación real
 
+## Integración de pedidos y pagos — 2026-11-02
+
+Ramas origen: pedidos 62b3070 y pagos e545106. Unión local preparada en integracion/pedidos-pagos, con main intacta y commit/publicación pendientes. Se resolvieron conflictos en modelo Pago, menú, panel, rutas y checklist. Esquema canónico y migración puente conservan datos originales y no auto-verifican abonos.
+
+52 pruebas/517 comprobaciones aprobadas. Migraciones 000200 y 000300 aplicadas localmente. Prueba real MariaDB: sobrepago, reenvío y cancelación concurrentes; promoción a firme tras verificar; conversión legacy repetible y sin pérdida. Los escenarios usan tablas clonadas aisladas y las eliminan al finalizar.
+
+La prueba encontró una lectura antigua de saldo bajo REPEATABLE READ; se corrigió usando lecturas bloqueantes también sobre pagos. Ficha/listado de pagos revisados a 360/1280 px con datos en memoria; sin desbordamiento de página. No se generaron abonos ficticios en tablas de negocio. Falta revisión manual del encargado, aprobación del commit/publicación y PR; reembolsos/anulaciones y roles diferenciados siguen pendientes.
+
 ## Pedidos y reservas — 2026-11-02
 
 Rama feature/pedidos desde main 5b0de65 (inventario/clientes integrados); base limpia antes de trabajar. Suite inicial 25 pruebas/258 comprobaciones. Regla validada: 25 % verificado para firme y regreso físico antes de liberar piezas enviadas.

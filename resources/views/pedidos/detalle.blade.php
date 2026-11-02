@@ -4,6 +4,7 @@
 <a href="{{ route('pedidos.listar') }}">← Volver a pedidos</a>
 <div class="d-flex flex-wrap justify-content-between gap-3 mt-3 mb-4">
     <div><span class="insignia-marca mb-2">{{ strtoupper($pedido->estado) }}</span><h1 class="fw-bold">Pedido #{{ $pedido->id }}</h1><p class="text-secondary mb-0">{{ $pedido->cliente_nombre }} · {{ $pedido->cliente_telefono }}</p></div>
+    <div><a class="btn btn-outline-primary" href="{{ route('pagos.show', $pedido->id) }}">Ver pagos y registrar abonos</a></div>
     @if ($pedido->estado === 'borrador' && ! $pedido->pagos()->exists())<div><a class="btn btn-outline-primary" href="{{ route('pedidos.editar', $pedido) }}">Editar borrador</a></div>@endif
 </div>
 @include('inventario.errores')

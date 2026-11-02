@@ -88,7 +88,7 @@ class GestionarPedidos
                     $this->error('El pedido necesita al menos una pieza.');
                 }
                 $piezas = Producto::whereIn('id', $detalles->pluck('producto_id'))->orderBy('id')->lockForUpdate()->get()->keyBy('id');
-                $firme = $pedido->pagadoCentavos() >= max(1, $pedido->depositoMinimoCentavos());
+                $firme = $pedido->pagadoCentavos(bloquear: true) >= max(1, $pedido->depositoMinimoCentavos());
                 if ($pedido->modalidad === 'deposito' && ! $firme) {
                     $this->error('El depósito verificado todavía no cubre el 25 % mínimo del total. Registra y verifica el pago antes de confirmar.');
                 }
@@ -173,7 +173,7 @@ class GestionarPedidos
     {
         DB::transaction(function () use ($pedido, $usuario) {
             $pedido = Pedido::whereKey($pedido->id)->lockForUpdate()->firstOrFail();
-            if ($pedido->estado === 'confirmado' && $pedido->pagadoCentavos() >= max(1, $pedido->depositoMinimoCentavos())) {
+            if ($pedido->estado === 'confirmado' && $pedido->pagadoCentavos(bloquear: true) >= max(1, $pedido->depositoMinimoCentavos())) {
                 $cambios = $pedido->reservas()->where('estado', 'activa')->where('tipo', 'temporal')->update(['tipo' => 'firme']);
                 if ($cambios) {
                     $this->evento($pedido, $usuario, 'reserva_firme', 'Los pagos verificados alcanzaron el mínimo requerido.');

@@ -65,23 +65,28 @@ return new class extends Migration
             $tabla->timestamps();
         });
         // Contrato compartido. El compañero implementará registro/verificación de pagos.
-        Schema::create('pagos', function (Blueprint $tabla) {
-            $tabla->engine = 'InnoDB';
-            $tabla->id();
-            $tabla->uuid('clave_operacion')->unique();
-            $tabla->foreignId('pedido_id')->constrained('pedidos')->restrictOnDelete();
-            $tabla->foreignId('usuario_id')->constrained('users')->restrictOnDelete();
-            $tabla->foreignId('verificado_por')->nullable()->constrained('users')->restrictOnDelete();
-            $tabla->decimal('monto', 12, 2);
-            $tabla->string('metodo', 40);
-            $tabla->string('referencia', 150)->nullable();
-            $tabla->date('fecha_pago');
-            $tabla->timestamp('verificado_en')->nullable();
-            $tabla->timestamp('anulado_en')->nullable();
-            $tabla->timestamps();
-        });
+        // Compatibilidad: algunos colaboradores aplicaron la migración legacy de pagos primero.
+        if (! Schema::hasTable('pagos')) {
+            Schema::create('pagos', function (Blueprint $tabla) {
+                $tabla->engine = 'InnoDB';
+                $tabla->id();
+                $tabla->uuid('clave_operacion')->unique();
+                $tabla->foreignId('pedido_id')->constrained('pedidos')->restrictOnDelete();
+                $tabla->foreignId('usuario_id')->constrained('users')->restrictOnDelete();
+                $tabla->foreignId('verificado_por')->nullable()->constrained('users')->restrictOnDelete();
+                $tabla->decimal('monto', 12, 2);
+                $tabla->string('metodo', 40);
+                $tabla->string('referencia', 150)->nullable();
+                $tabla->date('fecha_pago');
+                $tabla->timestamp('verificado_en')->nullable();
+                $tabla->timestamp('anulado_en')->nullable();
+                $tabla->timestamps();
+            });
+            if (DB::getDriverName() === 'mysql') {
+                DB::statement('ALTER TABLE pagos ADD CONSTRAINT pagos_monto_positivo CHECK (monto > 0)');
+            }
+        }
         if (DB::getDriverName() === 'mysql') {
-            DB::statement('ALTER TABLE pagos ADD CONSTRAINT pagos_monto_positivo CHECK (monto > 0)');
             DB::statement('ALTER TABLE pedidos ADD CONSTRAINT pedidos_importes_validos CHECK (total >= 0 AND porcentaje_deposito BETWEEN 1 AND 100)');
         }
     }

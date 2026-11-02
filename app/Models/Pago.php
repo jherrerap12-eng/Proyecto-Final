@@ -20,4 +20,14 @@ class Pago extends Model
     {
         return $this->belongsTo(Pedido::class, 'pedido_id');
     }
+
+    public function usuario(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'usuario_id');
+    }
+
+    public function verificador(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'verificado_por');
+    }
 }
