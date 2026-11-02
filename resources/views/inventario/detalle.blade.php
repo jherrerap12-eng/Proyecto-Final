@@ -7,6 +7,9 @@
     <div><a class="btn btn-outline-primary" href="{{ route('inventario.editar', $producto) }}">Editar datos</a></div>
 </div>
 @include('inventario.errores')
+@if ($producto->reservaActual)
+<div class="alert alert-warning">Pieza apartada en el <a href="{{ route('pedidos.mostrar', $producto->reservaActual->pedido_id) }}">pedido #{{ $producto->reservaActual->pedido_id }}</a>. Gestiona allí su reserva o devolución.</div>
+@endif
 @if (! $producto->activo)<div class="alert alert-secondary">Esta pieza está inactiva. Su historial se conserva y no admite movimientos hasta reactivarla.</div>@endif
 <div class="row g-4">
     <div class="col-lg-7">
@@ -40,7 +43,7 @@
             <div class="card-body p-4">
                 <h2 class="h5">Registrar movimiento</h2>
                 <p class="text-secondary small">Entradas y salidas manuales de esta pieza. Los pedidos y reservas se incorporarán en su módulo.</p>
-                @if ($producto->activo)
+                @if ($producto->activo && ! $producto->reservaActual)
                 <form method="POST" action="{{ route('inventario.ajustar', $producto) }}" data-envio-unico>
                     @csrf
                     <input type="hidden" name="referencia" value="{{ old('referencia', $referencia) }}">
@@ -59,7 +62,7 @@
                     <button type="submit" class="btn btn-primary">Registrar movimiento</button>
                 </form>
                 @else
-                    <p class="text-secondary mb-0">Reactiva la pieza para registrar movimientos.</p>
+                    <p class="text-secondary mb-0">La pieza debe estar activa y sin reserva para registrar movimientos manuales.</p>
                 @endif
             </div>
         </section>

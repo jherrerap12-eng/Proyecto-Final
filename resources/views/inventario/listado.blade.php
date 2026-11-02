@@ -28,7 +28,7 @@
             <label for="existencias" class="form-label">Existencias</label>
             <select id="existencias" name="existencias" class="form-select">
                 <option value="todas">Todas</option>
-                <option value="con" @selected(($filtros['existencias'] ?? '') === 'con')>Con existencia</option>
+                <option value="con" @selected(($filtros['existencias'] ?? '') === 'con')>Disponibles para venta</option>
                 <option value="sin" @selected(($filtros['existencias'] ?? '') === 'sin')>Sin existencia</option>
             </select>
         </div>
@@ -51,7 +51,7 @@
                     <td><a class="fw-bold" href="{{ route('inventario.mostrar', $producto) }}">{{ $producto->codigo }}</a><div>{{ $producto->nombre }}</div></td>
                     <td class="text-nowrap">Q {{ number_format((float) $producto->costo, 2) }}</td>
                     <td class="text-nowrap">Q {{ number_format((float) $producto->precio, 2) }}</td>
-                    <td><span class="badge {{ $producto->existencias ? 'text-bg-success' : 'text-bg-secondary' }}">{{ $producto->existencias ? '1 pieza' : 'Sin existencia' }}</span></td>
+                    <td>@if ($producto->reservaActual)<span class="badge text-bg-warning">{{ $producto->reservaActual->estado === 'devolucion_pendiente' ? 'Pendiente de regreso' : 'Reserva '.$producto->reservaActual->tipo }}</span>@else<span class="badge {{ $producto->existencias ? 'text-bg-success' : 'text-bg-secondary' }}">{{ $producto->existencias ? '1 pieza' : 'Sin existencia' }}</span>@endif</td>
                     <td>{{ $producto->activo ? 'Activo' : 'Inactivo' }}</td>
                     <td class="text-nowrap"><a class="btn btn-outline-primary btn-sm" href="{{ route('inventario.mostrar', $producto) }}">Ver pieza</a></td>
                 </tr>

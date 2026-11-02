@@ -34,8 +34,9 @@ Actualizado: 2026-11-01. Código escrito no equivale a validación del negocio n
 
 ## Sprints 3–6 → pendientes
 
-- [ ] Pedidos, reservas firme/temporal y prevención de sobreventa concurrente MySQL.
-- [ ] Cancelación sin doble liberación y devoluciones aprobadas.
+- [x] Pedidos/reservas implementados y probados en feature/pedidos; concurrencia comprobada en MariaDB local. Revisión/PR pendientes; MySQL 8 no probado.
+- [x] Cancelación sin doble liberación y regreso físico implementados según reglas aprobadas. Entregas completas pendientes.
+- [ ] Integrar interfaz de pagos/verificación para operar depósitos reales; base y contrato preparados en pedidos.
 - [ ] Pagos, correcciones y saldos; logística completa.
 - [ ] Reportes diarios/semanales/mensuales con ventas/cobros/ganancia diferenciados.
 - [ ] Filtros, paginación y Fetch útil.

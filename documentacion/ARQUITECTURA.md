@@ -29,6 +29,12 @@ Cada código representa una pieza física, con existencia 0/1, según decisión 
 
 Además de las tablas estándar Laravel, existen `productos` y `movimientos_inventario`: Producto 1:N MovimientoInventario, User 1:N MovimientoInventario. Las claves `producto_id` y `usuario_id` restringen el borrado del historial. Índice único en código y referencia de movimiento. Costos/precios DECIMAL(10,2); activo y versión en producto. MySQL/MariaDB aplica CHECK de existencia 0/1 y consistencia antes/cambio/después.
 
-`GestionarInventario` realiza cambios con transacciones y bloqueo de fila. La edición valida versión; la baja es desactivación sin borrar piezas. El diagrama anterior conserva entidades futuras de pedidos/reservas, aún no implementadas.
+`GestionarInventario` realiza cambios con transacciones y bloqueo de fila. La edición valida versión; la baja es desactivación sin borrar piezas. Una pieza reservada no admite ajustes manuales ni desactivación.
 
-Pruebas de acceso: SQLite en memoria. Concurrencia futura: MySQL y conexiones independientes, no asumir que SQLite demuestra bloqueo InnoDB.
+## Pedidos implementados — 2026-11-02
+
+Cliente 1:N Pedido; Pedido 1:N DetallePedido/Reserva/EventoPedido/Pago. Cada detalle representa una pieza y conserva código/nombre/costo/precio. Una reserva retiene producto_id histórico y producto_bloqueado_id nullable único para bloquear disponibilidad. Confirmación/cancelación/devolución transaccionales con bloqueos y orden consistente. Mínimo histórico del 25 % por pedido y cálculo en centavos enteros.
+
+La tabla/modelo Pago es contrato compartido; su interfaz, registro/verificación y ciclo de entregas se desarrollarán aparte. Ver PEDIDOS_Y_RESERVAS.md y CONTRATO_PAGOS.md. El diagrama conceptual anterior conserva Envio/HISTORIAL_ESTADO como entidades futuras: historial comercial actual usa eventos_pedido.
+
+Pruebas de acceso/reglas: SQLite en memoria. Concurrencia de inventario y pedidos comprobada con conexiones independientes MariaDB e InnoDB sobre tablas clonadas aisladas. MySQL 8 todavía no probado.

@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Producto extends Model
 {
@@ -20,5 +21,10 @@ class Producto extends Model
     public function movimientos(): HasMany
     {
         return $this->hasMany(MovimientoInventario::class, 'producto_id');
+    }
+
+    public function reservaActual(): HasOne
+    {
+        return $this->hasOne(Reserva::class, 'producto_bloqueado_id');
     }
 }

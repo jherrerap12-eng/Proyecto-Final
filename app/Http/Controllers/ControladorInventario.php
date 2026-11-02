@@ -22,7 +22,7 @@ class ControladorInventario extends Controller
             'existencias' => ['nullable', Rule::in(['con', 'sin', 'todas'])],
             'page' => ['nullable', 'integer', 'min:1'],
         ]);
-        $consulta = Producto::query();
+        $consulta = Producto::with('reservaActual');
         $estado = $filtros['estado'] ?? 'activos';
         if ($estado !== 'todos') {
             $consulta->where('activo', $estado === 'activos');
@@ -34,7 +34,7 @@ class ControladorInventario extends Controller
             });
         }
         if (($filtros['existencias'] ?? '') === 'con') {
-            $consulta->where('existencias', '>', 0);
+            $consulta->where('existencias', '>', 0)->whereDoesntHave('reservaActual');
         } elseif (($filtros['existencias'] ?? '') === 'sin') {
             $consulta->where('existencias', 0);
         }
@@ -57,6 +57,7 @@ class ControladorInventario extends Controller
 
     public function mostrar(Producto $producto): View
     {
+        $producto->load('reservaActual');
         $movimientos = $producto->movimientos()->with('usuario')->orderByDesc('id')->paginate(15);
         $referencia = (string) Str::uuid();
 
