@@ -28,6 +28,7 @@ Actualizado: 2026-11-01. Código escrito no equivale a validación del negocio n
 - [x] Búsqueda, filtros, paginación y pruebas de inventario.
 - [x] Revisión visual de listado, formulario y ficha a 1280/360 px, con vistas ficticias en memoria.
 - [ ] Clientes: CRUD, formularios, validaciones, búsquedas y pruebas.
+  - Código implementado en `feature/clientes`, con pruebas SQLite correctas. Pendientes: validar campos con el negocio, aplicar migración local, comprobar MySQL/MariaDB y revisar navegador/móvil. Ver `documentacion/CLIENTES.md`.
 - [ ] Permisos por operación acordados.
 - [ ] Revisión móvil y PR documentados.
 
