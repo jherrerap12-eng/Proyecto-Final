@@ -5,6 +5,7 @@ Aplicación administrativa interna de juguetes vendidos mediante lives y WhatsAp
 ## Estado real
 
 Base Laravel 12, inicio/cierre de sesión, panel protegido, plantilla Blade/Bootstrap y módulo de clientes implementado. Inventario todavía no implementado. Sin datos reales, cuentas predeterminadas ni registro público. Ver [CHECKLIST.md](CHECKLIST.md) y [guía de clientes](documentacion/CLIENTES.md).
+Base Laravel 12, inicio/cierre de sesión, panel protegido y plantilla Blade/Bootstrap. Inventario implementado en la rama `feature/inventario`: una pieza por código, datos comerciales, entradas/salidas, historial, desactivación, filtros y paginación. Clientes todavía no implementado en esta rama. Sin cuentas predeterminadas ni registro público. Ver [CHECKLIST.md](CHECKLIST.md) y [guía de inventario](documentacion/INVENTARIO.md).
 
 ## Herramientas
 

@@ -15,6 +15,8 @@ Route::middleware('guest')->group(function () {
 
 Route::middleware('auth')->group(function () {
     Route::resource('clientes', ControladorClientes::class)->parameters(['clientes' => 'cliente']);
+    require __DIR__.'/inventario.php';
+
     Route::view('/panel', 'panel.inicio')->name('panel');
     Route::post('/salir', [ControladorAutenticacion::class, 'salir'])->name('sesion.salir');
 });

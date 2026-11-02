@@ -5,7 +5,7 @@ Plazo: tres días. Los seis sprints se conservan como bloques previstos, no seis
 | Sprint | Prioridad | Entrega | Responsable | Estado |
 |---|---|---|---|---|
 | 1 | P0 | Requisitos, PRD, reglas/DER, Laravel, acceso, plantilla, Git compartido | Encargado; revisión conjunta | En progreso |
-| 2 | P0 | Inventario, costos/precios, clientes, formularios/búsquedas/pruebas | Encargado: inventario; compañero: clientes | Pendiente |
+| 2 | P0 | Inventario, costos/precios, clientes, formularios/búsquedas/pruebas | Encargado: inventario; compañero: clientes | Inventario implementado y probado en rama; revisión/PR y clientes pendientes |
 | 3 | P0 | Pedidos, reservas y concurrencia | Por asignar | Pendiente |
 | 4 | P0 | Pagos, cancelaciones y logística | Por asignar | Pendiente |
 | 5 | P1 | Reportes, filtros, paginación y Fetch | Por asignar | Pendiente |
