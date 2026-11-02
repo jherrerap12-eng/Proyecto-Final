@@ -26,6 +26,7 @@ Actualizado: 2026-11-01. Código escrito no equivale a validación del negocio n
 - [ ] Productos: código manual único, costos y precios.
 - [ ] Existencias y movimientos trazables.
 - [ ] Clientes: CRUD, formularios, validaciones, búsquedas y pruebas.
+  - Código implementado en `feature/clientes`, con pruebas SQLite correctas. Pendientes: validar campos con el negocio, aplicar migración local, comprobar MySQL/MariaDB y revisar navegador/móvil. Ver `documentacion/CLIENTES.md`.
 - [ ] Permisos por operación acordados.
 - [ ] Revisión móvil y PR documentados.
 
