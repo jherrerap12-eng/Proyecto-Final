@@ -34,6 +34,8 @@ Actualizado: 2026-11-01. Código escrito no equivale a validación del negocio n
 
 ## Sprints 3–6 → pendientes
 
+- [ ] Pagos: código y pruebas del contrato preparados en `feature/pagos`; falta integrar pedidos, añadir FK, validar reglas con el negocio y probar concurrencia MySQL. Ver `documentacion/PAGOS.md`.
+
 - [ ] Pedidos, reservas firme/temporal y prevención de sobreventa concurrente MySQL.
 - [ ] Cancelación sin doble liberación y devoluciones aprobadas.
 - [ ] Pagos, correcciones y saldos; logística completa.

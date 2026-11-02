@@ -17,6 +17,7 @@ erDiagram
     PRODUCTO ||--o{ MOVIMIENTO_INVENTARIO : registra
     DETALLE_PEDIDO ||--o{ RESERVA : origina
     PEDIDO ||--o{ PAGO : recibe
+    USER ||--o{ PAGO : registra
     PEDIDO ||--o{ HISTORIAL_ESTADO : conserva
     PEDIDO ||--o{ ENVIO : gestiona
 ```

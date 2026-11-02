@@ -89,6 +89,8 @@ Comprueba formato PHP sin modificar archivos. `vendor\bin\pint` aplica formato; 
 
 ## Documentación
 
+[Pagos: preparación y contrato de integración con pedidos](documentacion/PAGOS.md). La pantalla está disponible; el registro de abonos requiere integrar pedidos y su clave foránea.
+
 [Colaboración](CONTRIBUTING.md), [PRD](documentacion/PRD.md), [Reglas](documentacion/REGLAS_NEGOCIO.md), [Arquitectura y DER](documentacion/ARQUITECTURA.md), [Backlog](documentacion/BACKLOG.md), [GitHub](documentacion/GITHUB.md), [Verificación](documentacion/VERIFICACION.md).
 
 ## Producción pendiente

@@ -12,8 +12,11 @@
         <p class="text-secondary">Registra compradores y consulta sus datos de contacto.</p>
         <a class="btn btn-primary" href="{{ route('clientes.index') }}">Ir a clientes</a>
         <h2 class="h4">Tu espacio está listo</h2>
-        <p class="text-secondary">Ya puedes registrar piezas y consultar sus movimientos en inventario. El módulo de clientes se integrará por separado.</p>
+        <p class="text-secondary">Ya puedes registrar piezas y consultar sus movimientos en inventario.</p>
         <a href="{{ route('inventario.listar') }}" class="btn btn-primary">Abrir inventario</a>
+        <h2 class="h4 mt-4">Pagos y saldos</h2>
+        <p class="text-secondary">Consulta los abonos recibidos y el saldo pendiente de cada pedido.</p>
+        <a href="{{ route('pagos.index') }}" class="btn btn-primary">Abrir pagos</a>
     </div>
 </div>
 @endsection
