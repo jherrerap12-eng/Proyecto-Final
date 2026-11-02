@@ -25,4 +25,16 @@ El encargado confirmó la creación de su primera cuenta y el funcionamiento del
 
 Tras completar y guardar `.env`, `php artisan config:clear` permitió leer la configuración actual. `php artisan migrate:status` conectó y detectó que faltaba la tabla de migraciones. `php artisan migrate --no-interaction` creó la tabla de control y aplicó correctamente las tres migraciones estándar de usuarios/sesiones, cache y jobs. La consulta posterior mostró las tres como `Ran`, lote 1. No se registraron credenciales en este documento.
 
-Pendientes: crear cuentas de aplicación, probar acceso real, publicar con autorización, invitar compañero, reproducir instalación y desplegar. No se han implementado inventario/clientes ni sprints posteriores. La conexión local no acredita todavía pruebas contra MySQL 8 ni concurrencia de inventario.
+Estado posterior: primera cuenta y acceso confirmados; base publicada en `jherrerap12-eng/Proyecto-Final`, commit inicial `a4c5fed`, rama `feature/inventario` publicada. Invitación/clonación del compañero, revisión conjunta y despliegue siguen sin acreditarse. Clientes y sprints posteriores siguen pendientes. La conexión local es MariaDB, no una validación de MySQL 8.
+
+## Inventario — verificación de la rama
+
+- Regla confirmada por el encargado: un código por pieza física aunque sean iguales; existencia 0/1.
+- Migración `2026_11_01_000100_crear_tablas_inventario`: aplicada, lote 2. Crea productos/movimientos con InnoDB y restricciones; tablas de usuarios conservadas.
+- `php artisan test --compact`: 20 pruebas aprobadas y 181 comprobaciones (acceso e inventario), SQLite en memoria.
+- `php tests/Integracion/verificar_concurrencia_inventario.php`: aprobado en MariaDB local, dos conexiones compitiendo por la misma pieza; una salida, otro rechazo, existencia final 0, CHECK activo. Solo tablas clonadas con prefijo aleatorio; eliminadas al finalizar. No se demuestra todavía concurrencia de pedidos/reservas.
+- Pint sobre archivos propios: aprobado. `git diff --check`: sin errores de espacios.
+- `npm run build`: aprobado, 60 módulos y manifiesto/CSS/JS generados.
+- Capturas de listado/alta/detalle en Chrome invisible a 1280/360 px: sin desbordamiento de página; tablas desplazables. Datos ficticios en memoria, sin insertar en inventario real. Se corrigió traducción de paginación detectada en revisión.
+- Ocho rutas de inventario dentro de autenticación; controles CSRF en formularios.
+- El encargado confirmó el funcionamiento manual y autorizó commit/publicación de la rama. Pendientes: revisión de otro integrante, Pull Request e integración. Permisos por rol no definidos; acceso inicial igual para cuentas autenticadas.

@@ -6,7 +6,7 @@ Tres usuarios internos. Código corto manual. Depósito previo confirmado produc
 
 ## Pendiente, no aprobado
 
-1. Código por pieza única o por producto/cantidad; formato, longitud y reutilización.
+1. Formato final del código manual. Se implementó hasta 20 caracteres alfanuméricos, guion/guion bajo y mayúsculas; no se reutiliza al desactivar.
 2. Depósito mínimo y quién lo verifica.
 3. Reserva temporal: no asumir expiración automática; no existe plazo indicado.
 4. Cancelación después del envío/entrega: propuesta liberar tras retorno físico, requiere aprobación para evitar disponibilidad ficticia.
@@ -17,6 +17,12 @@ Tres usuarios internos. Código corto manual. Depósito previo confirmado produc
 9. Métodos de pago, reembolsos y sobrepagos.
 10. GTQ y America/Guatemala propuestos a confirmar.
 
-## Integridad propuesta, aún no implementada
+## Decisión validada por el encargado
 
-Dinero DECIMAL; cantidades validadas. Reservar mediante transacción y bloqueo de filas en orden consistente, revalidando disponibilidad dentro del bloqueo. Confirmación/cancelación idempotentes. Precio/costo históricos por detalle. No borrar historial comercial.
+Un código distinto por cada pieza física, aunque sean juguetes iguales. Inventario implementado con existencia 0 o 1 y costos/precios por pieza. No se agrupan piezas por nombre.
+
+## Integridad
+
+Implementado en inventario: dinero DECIMAL; entradas/salidas mediante transacción y bloqueo de fila; referencia única evita repetir el mismo movimiento; versión evita sobrescribir ediciones obsoletas; restricciones MySQL/MariaDB para existencia 0/1. Desactivación conserva la pieza y sus movimientos.
+
+Pendiente en pedidos: reservas bajo bloqueo, confirmación/cancelación idempotentes y precio/costo históricos por detalle. No borrar historial comercial.

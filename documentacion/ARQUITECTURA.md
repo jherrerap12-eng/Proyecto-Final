@@ -23,6 +23,12 @@ erDiagram
 
 Producto: código/descripción/costo/precio. Cliente: contacto. Pedido: modalidad/estado. Detalle: cantidad y valores históricos. Reserva: tipo/cantidad/estado. Pago: importe/referencia. Envio: transportista/seguimiento. Movimiento: cantidad/tipo/motivo. Historial: estado/fecha/responsable.
 
-Validar cardinalidad de envíos y piezas/cantidades antes del esquema final. Solo están migraciones estándar Laravel; actualizar DER según implementación.
+Cada código representa una pieza física, con existencia 0/1, según decisión del encargado. La cardinalidad de envíos continúa pendiente.
+
+## Inventario implementado
+
+Además de las tablas estándar Laravel, existen `productos` y `movimientos_inventario`: Producto 1:N MovimientoInventario, User 1:N MovimientoInventario. Las claves `producto_id` y `usuario_id` restringen el borrado del historial. Índice único en código y referencia de movimiento. Costos/precios DECIMAL(10,2); activo y versión en producto. MySQL/MariaDB aplica CHECK de existencia 0/1 y consistencia antes/cambio/después.
+
+`GestionarInventario` realiza cambios con transacciones y bloqueo de fila. La edición valida versión; la baja es desactivación sin borrar piezas. El diagrama anterior conserva entidades futuras de pedidos/reservas, aún no implementadas.
 
 Pruebas de acceso: SQLite en memoria. Concurrencia futura: MySQL y conexiones independientes, no asumir que SQLite demuestra bloqueo InnoDB.
