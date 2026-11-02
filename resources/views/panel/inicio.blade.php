@@ -11,9 +11,15 @@
         <h2 class="h4">Gestión de clientes</h2>
         <p class="text-secondary">Registra compradores y consulta sus datos de contacto.</p>
         <a class="btn btn-primary" href="{{ route('clientes.index') }}">Ir a clientes</a>
-        <h2 class="h4">Tu espacio está listo</h2>
-        <p class="text-secondary">Ya puedes registrar piezas y consultar sus movimientos en inventario. El módulo de clientes se integrará por separado.</p>
+        <h2 class="h4 mt-4">Inventario</h2>
+        <p class="text-secondary">Registra piezas individuales y consulta su disponibilidad y movimientos.</p>
         <a href="{{ route('inventario.listar') }}" class="btn btn-primary">Abrir inventario</a>
+        <h2 class="h4 mt-4">Pedidos y reservas</h2>
+        <p class="text-secondary">Selecciona un cliente, reúne sus juguetes y confirma la reserva.</p>
+        <a href="{{ route('pedidos.listar') }}" class="btn btn-primary">Abrir pedidos</a>
+        <h2 class="h4 mt-4">Pagos y saldos</h2>
+        <p class="text-secondary">Registra abonos, verifica los recibidos y consulta el saldo de cada pedido.</p>
+        <a href="{{ route('pagos.index') }}" class="btn btn-primary">Abrir pagos</a>
     </div>
 </div>
 @endsection

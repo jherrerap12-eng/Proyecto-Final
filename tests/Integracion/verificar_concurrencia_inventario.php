@@ -51,7 +51,7 @@ if ($trabajador) {
     }
 }
 
-$tablas = ['users', 'productos', 'movimientos_inventario'];
+$tablas = ['users', 'productos', 'movimientos_inventario', 'reservas'];
 $procesos = [];
 $iniciar = function (string $orden) use ($prefijo, &$procesos): array {
     $proceso = proc_open([PHP_BINARY, __FILE__, 'trabajador', $prefijo, $orden], [0 => ['pipe', 'r'], 1 => ['pipe', 'w'], 2 => ['pipe', 'w']], $tuberias);

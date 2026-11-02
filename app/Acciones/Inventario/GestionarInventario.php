@@ -61,6 +61,10 @@ class GestionarInventario
                 throw ValidationException::withMessages(['cantidad' => 'Reactiva el producto antes de modificar sus existencias.']);
             }
 
+            if ($producto->reservaActual()->lockForUpdate()->first()) {
+                throw ValidationException::withMessages(['cantidad' => 'La pieza está reservada. Gestiona su liberación desde el pedido.']);
+            }
+
             $posteriores = $producto->existencias + $cantidad;
             if ($posteriores < 0 || $posteriores > 1) {
                 throw ValidationException::withMessages(['cantidad' => 'Cada código identifica una pieza: no puede salir si ya no está disponible ni ingresar dos veces.']);
@@ -75,6 +79,9 @@ class GestionarInventario
         DB::transaction(function () use ($producto, $activo, $version) {
             $producto = Producto::whereKey($producto->id)->lockForUpdate()->firstOrFail();
             $this->comprobarVersion($producto, $version);
+            if (! $activo && $producto->reservaActual()->lockForUpdate()->first()) {
+                throw ValidationException::withMessages(['version' => 'No puedes desactivar una pieza reservada. Gestiona primero el pedido.']);
+            }
             $producto->activo = $activo;
             $producto->version++;
             $producto->save();

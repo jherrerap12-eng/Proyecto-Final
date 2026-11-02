@@ -4,8 +4,7 @@ Aplicación administrativa interna de juguetes vendidos mediante lives y WhatsAp
 
 ## Estado real
 
-Base Laravel 12, inicio/cierre de sesión, panel protegido, plantilla Blade/Bootstrap y módulo de clientes implementado. Inventario todavía no implementado. Sin datos reales, cuentas predeterminadas ni registro público. Ver [CHECKLIST.md](CHECKLIST.md) y [guía de clientes](documentacion/CLIENTES.md).
-Base Laravel 12, inicio/cierre de sesión, panel protegido y plantilla Blade/Bootstrap. Inventario implementado en la rama `feature/inventario`: una pieza por código, datos comerciales, entradas/salidas, historial, desactivación, filtros y paginación. Clientes todavía no implementado en esta rama. Sin cuentas predeterminadas ni registro público. Ver [CHECKLIST.md](CHECKLIST.md) y [guía de inventario](documentacion/INVENTARIO.md).
+Laravel 12 con autenticación, inventario por pieza y clientes integrados en main. La rama integracion/pedidos-pagos reúne pedidos/reservas más registro/verificación de pagos, mínimo 25 %, cancelación/regreso físico, saldos, búsquedas e historial. El encargado autorizó el commit/publicación de esta rama; main todavía no contiene la integración y queda pendiente revisar e integrar su PR. Sin cuentas predeterminadas ni registro público. Ver [CHECKLIST.md](CHECKLIST.md), [clientes](documentacion/CLIENTES.md), [inventario](documentacion/INVENTARIO.md), [pedidos](documentacion/PEDIDOS_Y_RESERVAS.md) y [guía de integración](documentacion/INTEGRACION_PEDIDOS_PAGOS.md).
 
 ## Herramientas
 
@@ -88,6 +87,8 @@ vendor\bin\pint --test
 Comprueba formato PHP sin modificar archivos. `vendor\bin\pint` aplica formato; revisar después los cambios.
 
 ## Documentación
+
+[Pagos: preparación y contrato de integración con pedidos](documentacion/PAGOS.md). La pantalla está disponible; el registro de abonos requiere integrar pedidos y su clave foránea.
 
 [Colaboración](CONTRIBUTING.md), [PRD](documentacion/PRD.md), [Reglas](documentacion/REGLAS_NEGOCIO.md), [Arquitectura y DER](documentacion/ARQUITECTURA.md), [Backlog](documentacion/BACKLOG.md), [GitHub](documentacion/GITHUB.md), [Verificación](documentacion/VERIFICACION.md).
 

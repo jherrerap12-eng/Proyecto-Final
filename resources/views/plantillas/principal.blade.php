@@ -13,6 +13,8 @@
         <div class="container py-2 gap-2 flex-wrap">
             <a class="navbar-brand fw-bold text-primary" href="{{ url('/') }}">Babybu <span class="text-body">Toys</span></a>
             @auth
+                <a class="btn btn-sm {{ request()->routeIs('pagos.*') ? 'btn-primary' : 'btn-outline-primary' }}" href="{{ route('pagos.index') }}">Pagos</a>
+                <a class="btn btn-sm {{ request()->routeIs('pedidos.*') ? 'btn-primary' : 'btn-outline-primary' }}" href="{{ route('pedidos.listar') }}">Pedidos</a>
                 <a class="nav-link {{ request()->routeIs('clientes.*') ? 'fw-bold text-primary' : '' }}" href="{{ route('clientes.index') }}" @if(request()->routeIs('clientes.*')) aria-current="page" @endif>Clientes</a>
                 <a class="btn btn-sm {{ request()->routeIs('inventario.*') ? 'btn-primary' : 'btn-outline-primary' }}" href="{{ route('inventario.listar') }}">Inventario</a>
                 <div class="d-flex align-items-center gap-3 ms-auto">

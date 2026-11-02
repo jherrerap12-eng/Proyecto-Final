@@ -2,6 +2,15 @@
 
 return [
     'required' => 'El campo :attribute es obligatorio.',
+    'accepted' => 'Debes confirmar el regreso físico de todas las piezas.',
+    'required_unless' => 'El campo :attribute es obligatorio para este método de pago.',
+    'regex' => 'El formato de :attribute no es válido.',
+    'date_format' => 'El campo :attribute debe usar el formato :format.',
+    'before_or_equal' => 'El campo :attribute no puede ser posterior a :date.',
+    'gt' => ['numeric' => 'El campo :attribute debe ser mayor que :value.'],
+    'array' => 'El campo :attribute debe ser una selección válida.',
+    'exists' => 'La selección de :attribute no existe o está de baja.',
+    'distinct' => 'No puedes seleccionar la misma pieza más de una vez.',
     'string' => 'El campo :attribute debe ser texto.',
     'email' => 'El campo :attribute debe contener un correo electrónico válido.',
     'unique' => 'El valor de :attribute ya está registrado.',
@@ -13,10 +22,12 @@ return [
     'in' => 'El valor de :attribute no es válido.',
     'uuid' => 'La referencia no es válida. Recarga el formulario.',
     'min' => [
+        'array' => 'Selecciona al menos :min pieza.',
         'numeric' => 'El campo :attribute debe ser al menos :min.',
         'string' => 'El campo :attribute debe tener al menos :min caracteres.',
     ],
     'max' => [
+        'array' => 'Selecciona como máximo :max piezas.',
         'numeric' => 'El campo :attribute no debe superar :max.',
         'string' => 'El campo :attribute no debe superar :max caracteres.',
     ],

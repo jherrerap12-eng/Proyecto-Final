@@ -1,4 +1,22 @@
-# Verificación real → 2026-11-01
+# Verificación real
+
+## Integración de pedidos y pagos — 2026-11-02
+
+Ramas origen: pedidos 62b3070 y pagos e545106. Unión local preparada en integracion/pedidos-pagos, con main intacta y commit/publicación pendientes. Se resolvieron conflictos en modelo Pago, menú, panel, rutas y checklist. Esquema canónico y migración puente conservan datos originales y no auto-verifican abonos.
+
+52 pruebas/517 comprobaciones aprobadas. Migraciones 000200 y 000300 aplicadas localmente. Prueba real MariaDB: sobrepago, reenvío y cancelación concurrentes; promoción a firme tras verificar; conversión legacy repetible y sin pérdida. Los escenarios usan tablas clonadas aisladas y las eliminan al finalizar.
+
+La prueba encontró una lectura antigua de saldo bajo REPEATABLE READ; se corrigió usando lecturas bloqueantes también sobre pagos. Ficha/listado de pagos revisados a 360/1280 px con datos en memoria; sin desbordamiento de página. No se generaron abonos ficticios en tablas de negocio. Falta revisión manual del encargado, aprobación del commit/publicación y PR; reembolsos/anulaciones y roles diferenciados siguen pendientes.
+
+## Pedidos y reservas — 2026-11-02
+
+Rama feature/pedidos desde main 5b0de65 (inventario/clientes integrados); base limpia antes de trabajar. Suite inicial 25 pruebas/258 comprobaciones. Regla validada: 25 % verificado para firme y regreso físico antes de liberar piezas enviadas.
+
+Resultados: 38 pruebas/396 comprobaciones aprobadas sobre SQLite en memoria; migración nueva aplicada en MariaDB; scripts concurrentes de pedidos/inventario aprobados sobre clones aislados eliminados al terminar. En pedidos: dos conexiones, una confirmación, un rechazo y una reserva bloqueante. Sin fixtures insertados en tablas reales.
+
+Vite compiló 61 módulos; Pint aplicado. Listado/formulario/detalle revisados en Chrome a 360/1280 px sin desbordamiento de página. Fetch probado con respuestas ficticias, selección preservada y total correcto. El encargado confirmó el funcionamiento y autorizó commit/publicación. Integración del módulo de pagos del compañero, entregas completas y PR siguen pendientes.
+
+## Registro inicial — 2026-11-01
 
 PHP 8.2.12, Composer 2.10.3, Node 24.13.1, npm 10.2.4, Git 2.53. Extensiones pdo_mysql/pdo_sqlite, mbstring, openssl, curl, zip y XML disponibles. Cliente XAMPP MariaDB 10.4.32; servidor no verificado.
 
