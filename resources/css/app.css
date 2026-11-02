@@ -1,6 +1,8 @@
 @import 'bootstrap/dist/css/bootstrap.min.css';
-:root { --bs-primary: #6446ad; --bs-primary-rgb: 100, 70, 173; }
+:root { --bs-primary: #6446ad; --bs-primary-rgb: 100, 70, 173; --bs-link-color: #6446ad; --bs-link-color-rgb: 100, 70, 173; --bs-link-hover-color: #50368e; --bs-link-hover-color-rgb: 80, 54, 142; }
 body { background: #f7f5fb; color: #29243a; min-height: 100vh; }
 .btn-primary { --bs-btn-bg: #6446ad; --bs-btn-border-color: #6446ad; --bs-btn-hover-bg: #50368e; --bs-btn-hover-border-color: #50368e; --bs-btn-active-bg: #50368e; --bs-btn-active-border-color: #50368e; --bs-btn-disabled-bg: #6446ad; --bs-btn-disabled-border-color: #6446ad; }
 .form-control:focus { border-color: #9075cf; box-shadow: 0 0 0 .25rem rgb(100 70 173 / 15%); }
 .insignia-marca { display: inline-block; padding: .45rem .8rem; background: #eae4f7; color: #50368e; border-radius: 2rem; font-size: .75rem; font-weight: 700; letter-spacing: .08em; }
+.btn-outline-primary { --bs-btn-color: #6446ad; --bs-btn-border-color: #6446ad; --bs-btn-hover-bg: #6446ad; --bs-btn-hover-border-color: #6446ad; --bs-btn-active-bg: #50368e; --bs-btn-active-border-color: #50368e; }
+.pagination { --bs-pagination-color: #6446ad; --bs-pagination-active-bg: #6446ad; --bs-pagination-active-border-color: #6446ad; }

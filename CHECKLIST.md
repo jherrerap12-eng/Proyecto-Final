@@ -21,10 +21,12 @@ Actualizado: 2026-11-01. Código escrito no equivale a validación del negocio n
 - [ ] GitHub Projects con responsables, cinco columnas e historial real.
 - [ ] Instalación reproducida por el compañero.
 
-## Sprint 2 → no iniciado
+## Sprint 2 — inventario implementado; integración y clientes pendientes
 
-- [ ] Productos: código manual único, costos y precios.
-- [ ] Existencias y movimientos trazables.
+- [x] Productos: código manual único por pieza física, costos y precios.
+- [x] Existencias 0/1 y movimientos con motivo/responsable; protección transaccional.
+- [x] Búsqueda, filtros, paginación y pruebas de inventario.
+- [x] Revisión visual de listado, formulario y ficha a 1280/360 px, con vistas ficticias en memoria.
 - [ ] Clientes: CRUD, formularios, validaciones, búsquedas y pruebas.
 - [ ] Permisos por operación acordados.
 - [ ] Revisión móvil y PR documentados.
@@ -43,4 +45,4 @@ Actualizado: 2026-11-01. Código escrito no equivale a validación del negocio n
 
 ## Condicionados y evidencias
 
-API REST independiente y CI/CD no son obligaciones universales de la guía. Trabajar dos inicialmente no elimina el requisito académico de cinco integrantes. No hay commits nuevos, PR, invitaciones, tablero o despliegue acreditados aquí. Ver `documentacion/VERIFICACION.md` para resultados técnicos reales.
+API REST independiente y CI/CD no son obligaciones universales de la guía. Trabajar dos inicialmente no elimina el requisito académico de cinco integrantes. Base publicada en el commit inicial `a4c5fed`; el encargado validó inventario y autorizó su commit/publicación en rama. PR, revisión de otro integrante, invitaciones, tablero y despliegue siguen sin acreditarse aquí. Ver `documentacion/VERIFICACION.md` para resultados técnicos reales.
