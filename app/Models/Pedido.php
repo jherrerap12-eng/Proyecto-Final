@@ -39,6 +39,11 @@ class Pedido extends Model
         return $this->hasMany(Pago::class, 'pedido_id');
     }
 
+    public function reembolsos(): HasMany
+    {
+        return $this->hasMany(Reembolso::class, 'pedido_id');
+    }
+
     public function eventos(): HasMany
     {
         return $this->hasMany(EventoPedido::class, 'pedido_id');

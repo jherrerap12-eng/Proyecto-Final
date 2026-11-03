@@ -22,7 +22,12 @@ class ConsultarReportes
             ->whereNotNull('verificado_por')->whereNull('anulado_en');
     }
 
-    public function ventas(array $filtros): Builder
+    /**
+     * Criterio único de venta, compartido por reportes y dashboard (acordado 2026-11-02):
+     * pedido confirmado, ENTREGADO y PAGADO por completo con abonos verificados vigentes.
+     * Fecha de venta = la última de confirmación, verificación que completó el pago y entrega.
+     */
+    private function ventasBase(): Builder
     {
         $abonos = $this->pagosValidos()->select('pedido_id')
             ->selectRaw('SUM('.$this->centavos('monto').') AS abonado_centavos, MAX(verificado_en) AS ultima_verificacion')
@@ -33,14 +38,30 @@ class ConsultarReportes
         $base = DB::table('pedidos as p')
             ->joinSub($abonos, 'a', 'a.pedido_id', '=', 'p.id')
             ->joinSub($detalles, 'd', 'd.pedido_id', '=', 'p.id')
+            ->leftJoin('envios as e', 'e.pedido_id', '=', 'p.id')
             ->where('p.estado', 'confirmado')->whereNotNull('p.confirmado_en')->where('p.total', '>', 0)
+            ->where('p.estado_logistico', 'entregado')
             ->whereRaw('a.abonado_centavos >= '.$this->centavos('p.total'))
             ->select('p.id as pedido_id', 'p.cliente_nombre')
-            ->selectRaw('CASE WHEN p.confirmado_en > a.ultima_verificacion THEN p.confirmado_en ELSE a.ultima_verificacion END AS fecha_venta')
+            ->selectRaw('CASE WHEN p.confirmado_en >= a.ultima_verificacion AND p.confirmado_en >= COALESCE(e.entregado_en, p.confirmado_en) THEN p.confirmado_en WHEN a.ultima_verificacion >= COALESCE(e.entregado_en, a.ultima_verificacion) THEN a.ultima_verificacion ELSE e.entregado_en END AS fecha_venta')
             ->selectRaw($this->centavos('p.total').' AS total_centavos, d.costo_centavos, d.precio_centavos - d.costo_centavos AS ganancia_centavos');
+
+        return DB::query()->fromSub($base, 'ventas');
+    }
+
+    /** Totales históricos (sin rango de fechas) con el mismo criterio, para el dashboard. */
+    public function totalesHistoricos(): array
+    {
+        $fila = $this->ventasBase()->selectRaw('COUNT(*) AS pedidos, COALESCE(SUM(total_centavos), 0) AS ventas, COALESCE(SUM(ganancia_centavos), 0) AS ganancia')->first();
+
+        return ['pedidos' => (int) $fila->pedidos, 'ventas' => (int) $fila->ventas, 'ganancia' => (int) $fila->ganancia];
+    }
+
+    public function ventas(array $filtros): Builder
+    {
         $fin = CarbonImmutable::parse($filtros['hasta'], 'America/Guatemala')->addDay()->toDateString();
 
-        return DB::query()->fromSub($base, 'ventas')
+        return $this->ventasBase()
             ->where('fecha_venta', '>=', $filtros['desde'].' 00:00:00')
             ->where('fecha_venta', '<', $fin.' 00:00:00');
     }
@@ -54,6 +75,18 @@ class ConsultarReportes
             ->where('pagos.fecha_pago', '<', $fin)
             ->select('pagos.id as pago_id', 'pagos.pedido_id', 'p.cliente_nombre', 'pagos.fecha_pago', 'pagos.metodo', 'p.estado as estado_pedido')
             ->selectRaw($this->centavos('pagos.monto').' AS monto_centavos');
+    }
+
+    /** Devoluciones de dinero por fecha de reembolso; se restan de los cobros para el cobro neto. */
+    public function reembolsos(array $filtros): Builder
+    {
+        $fin = CarbonImmutable::parse($filtros['hasta'], 'America/Guatemala')->addDay()->toDateString();
+
+        return DB::table('reembolsos as r')->join('pedidos as p', 'p.id', '=', 'r.pedido_id')
+            ->where('r.fecha_reembolso', '>=', $filtros['desde'])
+            ->where('r.fecha_reembolso', '<', $fin)
+            ->select('r.id as reembolso_id', 'r.pedido_id', 'p.cliente_nombre', 'r.fecha_reembolso', 'r.metodo')
+            ->selectRaw($this->centavos('r.monto').' AS monto_centavos');
     }
 
     public function resumen(array $filtros): array
@@ -72,6 +105,15 @@ class ConsultarReportes
             $totales['cobros'] += (int) $cobro->monto_centavos;
             $periodos[$clave]['cobros'] += (int) $cobro->monto_centavos;
         }
+        foreach ($this->reembolsos($filtros)->orderBy('reembolso_id')->lazy(500) as $reembolso) {
+            $clave = $this->periodo($periodos, $reembolso->fecha_reembolso, $filtros);
+            $totales['reembolsos'] += (int) $reembolso->monto_centavos;
+            $periodos[$clave]['reembolsos'] += (int) $reembolso->monto_centavos;
+        }
+        $totales['cobro_neto'] = $totales['cobros'] - $totales['reembolsos'];
+        foreach ($periodos as $clave => $periodo) {
+            $periodos[$clave]['cobro_neto'] = $periodo['cobros'] - $periodo['reembolsos'];
+        }
         ksort($periodos);
 
         return ['totales' => $totales, 'periodos' => array_values($periodos)];
@@ -79,7 +121,7 @@ class ConsultarReportes
 
     private function ceros(): array
     {
-        return ['pedidos' => 0, 'ventas' => 0, 'costos' => 0, 'ganancia' => 0, 'cobros' => 0];
+        return ['pedidos' => 0, 'ventas' => 0, 'costos' => 0, 'ganancia' => 0, 'cobros' => 0, 'reembolsos' => 0, 'cobro_neto' => 0];
     }
 
     private function periodo(array &$periodos, string $fecha, array $filtros): string

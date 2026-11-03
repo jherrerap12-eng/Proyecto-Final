@@ -29,7 +29,7 @@ class SolicitudReporte extends FormRequest
             'desde' => ['bail', 'required', 'string', 'date_format:Y-m-d'],
             'hasta' => ['bail', 'required', 'string', 'date_format:Y-m-d'],
             'agrupacion' => ['required', Rule::in(['diaria', 'semanal', 'mensual'])],
-            'tipo' => [$this->routeIs('reportes.exportar') ? 'required' : 'sometimes', Rule::in(['resumen', 'ventas', 'cobros'])],
+            'tipo' => [$this->routeIs('reportes.exportar') ? 'required' : 'sometimes', Rule::in(['resumen', 'ventas', 'cobros', 'reembolsos'])],
             'ventas_pagina' => ['sometimes', 'integer', 'min:1'],
             'cobros_pagina' => ['sometimes', 'integer', 'min:1'],
         ];

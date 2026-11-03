@@ -34,6 +34,8 @@ class ReportesTest extends TestCase
             'referencia' => (string) Str::uuid(), 'cliente_id' => $cliente->id, 'usuario_id' => $this->operador->id,
             'cliente_nombre' => 'Cliente histórico', 'cliente_telefono' => '55551234', 'modalidad' => 'contra_entrega',
             'total' => '100.00', 'estado' => 'confirmado', 'confirmado_en' => '2026-11-01 09:00:00',
+            // Criterio único de venta: entregada y pagada. Sin envío registrado, la entrega no fija la fecha.
+            'estado_logistico' => 'entregado',
         ], $cambios));
         foreach ($piezas as [$precio, $costo]) {
             $producto = Producto::create(['codigo' => 'R-'.Str::random(12), 'nombre' => 'Pieza actual', 'precio' => $precio, 'costo' => $costo]);
@@ -98,8 +100,8 @@ class ReportesTest extends TestCase
     public function test_mes_predeterminado_y_periodo_vacio(): void
     {
         $this->actingAs($this->operador)->get('/reportes')->assertOk()
-            ->assertViewHas('filtros', $this->filtros())->assertSee('No hay ventas ni cobros verificados')
-            ->assertViewHas('resumen', fn ($resumen) => $resumen['totales'] === ['pedidos' => 0, 'ventas' => 0, 'costos' => 0, 'ganancia' => 0, 'cobros' => 0]);
+            ->assertViewHas('filtros', $this->filtros())->assertSee('No hay ventas, cobros ni reembolsos')
+            ->assertViewHas('resumen', fn ($resumen) => $resumen['totales'] === ['pedidos' => 0, 'ventas' => 0, 'costos' => 0, 'ganancia' => 0, 'cobros' => 0, 'reembolsos' => 0, 'cobro_neto' => 0]);
         $this->assertCount(1, $this->csv('resumen'));
         $this->assertCount(1, $this->csv('ventas'));
         $this->assertCount(1, $this->csv('cobros'));
@@ -114,7 +116,7 @@ class ReportesTest extends TestCase
         $pedido->cliente->update(['nombre' => 'Cliente modificado']);
         $pedido->cliente->delete();
         Producto::query()->update(['precio' => '999.00', 'costo' => '888.00']);
-        $this->assertSame(['pedidos' => 1, 'ventas' => 10000, 'costos' => 3000, 'ganancia' => 7000, 'cobros' => 10000], $this->resumen()['totales']);
+        $this->assertSame(['pedidos' => 1, 'ventas' => 10000, 'costos' => 3000, 'ganancia' => 7000, 'cobros' => 10000, 'reembolsos' => 0, 'cobro_neto' => 10000], $this->resumen()['totales']);
         $this->actingAs($this->operador)->get('/reportes')->assertOk()->assertSee('Cliente histórico')->assertDontSee('Cliente modificado');
     }
 
@@ -131,7 +133,7 @@ class ReportesTest extends TestCase
         $cancelado = $this->pedido(['estado' => 'cancelado', 'cancelado_en' => '2026-11-03 10:00:00']);
         $this->abono($cancelado);
         $this->pedido(['total' => '0.00'], [['0.00', '0.00']]);
-        $this->assertSame(['pedidos' => 0, 'ventas' => 0, 'costos' => 0, 'ganancia' => 0, 'cobros' => 20000], $this->resumen()['totales']);
+        $this->assertSame(['pedidos' => 0, 'ventas' => 0, 'costos' => 0, 'ganancia' => 0, 'cobros' => 20000, 'reembolsos' => 0, 'cobro_neto' => 20000], $this->resumen()['totales']);
         $this->actingAs($this->operador)->get('/reportes')->assertOk()->assertSee('Cancelado');
     }
 
@@ -183,7 +185,7 @@ class ReportesTest extends TestCase
         $pedido = $this->pedido(['total' => '0.30'], [['0.10', '0.11'], ['0.20', '0.20']]);
         $this->abono($pedido, ['monto' => '0.10']);
         $this->abono($pedido, ['monto' => '0.20']);
-        $this->assertSame(['pedidos' => 1, 'ventas' => 30, 'costos' => 31, 'ganancia' => -1, 'cobros' => 30], $this->resumen()['totales']);
+        $this->assertSame(['pedidos' => 1, 'ventas' => 30, 'costos' => 31, 'ganancia' => -1, 'cobros' => 30, 'reembolsos' => 0, 'cobro_neto' => 30], $this->resumen()['totales']);
         $this->actingAs($this->operador)->get('/reportes')->assertOk()->assertSee('Q -0.01');
         for ($i = 0; $i < 2; $i++) {
             $grande = $this->pedido(['total' => '99999999.99'], [['99999999.99', '0.00']]);

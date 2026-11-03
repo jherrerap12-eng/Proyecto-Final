@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Pago extends Model
 {
@@ -29,5 +30,22 @@ class Pago extends Model
     public function verificador(): BelongsTo
     {
         return $this->belongsTo(User::class, 'verificado_por');
+    }
+
+    public function anulador(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'anulado_por');
+    }
+
+    /** Abono original que este registro corrige. */
+    public function corrige(): BelongsTo
+    {
+        return $this->belongsTo(Pago::class, 'corrige_pago_id');
+    }
+
+    /** Abono que reemplazó a este cuando se corrigió. */
+    public function correccion(): HasOne
+    {
+        return $this->hasOne(Pago::class, 'corrige_pago_id');
     }
 }

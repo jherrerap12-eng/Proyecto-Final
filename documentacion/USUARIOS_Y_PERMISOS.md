@@ -11,6 +11,7 @@ Las tres cuentas internas se reparten en tres roles. **Es una propuesta**: el en
 | Consultar todo; registrar clientes, pedidos, abonos pendientes y entregas | ✔ | ✔ | ✔ |
 | Verificar pagos (`verificar-pagos`) | ✔ | ✔ | — |
 | Corregir o anular abonos (`corregir-pagos`, rama de correcciones) | ✔ | ✔ | — |
+| Registrar reembolsos (`registrar-reembolsos`, rama de reembolsos) | ✔ | — | — |
 | Ajustar inventario manualmente (`ajustar-inventario`) | ✔ | ✔ | — |
 | Cancelar pedidos (`cancelar-pedidos`) | ✔ | ✔ | — |
 | Administrar usuarios (`administrar-usuarios`) | ✔ | — | — |

@@ -18,6 +18,7 @@ final class Permisos
         'administrar-usuarios' => ['administrador'],
         'verificar-pagos' => ['administrador', 'supervisor'],
         'corregir-pagos' => ['administrador', 'supervisor'],
+        'registrar-reembolsos' => ['administrador'],
         'ajustar-inventario' => ['administrador', 'supervisor'],
         'cancelar-pedidos' => ['administrador', 'supervisor'],
     ];
