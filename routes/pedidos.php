@@ -12,6 +12,6 @@ Route::prefix('pedidos')->name('pedidos.')->controller(ControladorPedidos::class
     Route::get('/{pedido}/editar', 'editar')->whereNumber('pedido')->name('editar');
     Route::put('/{pedido}', 'actualizar')->whereNumber('pedido')->name('actualizar');
     Route::post('/{pedido}/confirmar', 'confirmar')->whereNumber('pedido')->name('confirmar');
-    Route::post('/{pedido}/cancelar', 'cancelar')->whereNumber('pedido')->name('cancelar');
+    Route::post('/{pedido}/cancelar', 'cancelar')->whereNumber('pedido')->middleware('can:cancelar-pedidos')->name('cancelar');
     Route::post('/{pedido}/devolucion', 'devolver')->whereNumber('pedido')->name('devolver');
 });

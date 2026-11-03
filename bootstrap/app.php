@@ -1,8 +1,10 @@
 <?php
 
+use App\Http\Middleware\VerificarUsuarioActivo;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
+use Illuminate\Session\Middleware\AuthenticateSession;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -13,6 +15,11 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware) {
         $middleware->redirectGuestsTo(fn () => route('login'));
         $middleware->redirectUsersTo(fn () => route('panel'));
+        // Cierra sesiones de cuentas desactivadas o cuya contraseña cambió en otro dispositivo.
+        $middleware->web(append: [
+            AuthenticateSession::class,
+            VerificarUsuarioActivo::class,
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //

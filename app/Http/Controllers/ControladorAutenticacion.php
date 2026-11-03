@@ -33,7 +33,8 @@ class ControladorAutenticacion extends Controller
             ]);
         }
 
-        if (! Auth::attempt($credenciales)) {
+        // Una cuenta desactivada no puede ingresar; el mensaje no revela si existe.
+        if (! Auth::attempt([...$credenciales, 'activo' => true])) {
             RateLimiter::hit($claveIntentos, 60);
 
             throw ValidationException::withMessages([

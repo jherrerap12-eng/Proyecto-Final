@@ -30,6 +30,7 @@ Actualizado: 2026-11-01. Código escrito no equivale a validación del negocio n
 - [ ] Clientes: CRUD, formularios, validaciones, búsquedas y pruebas.
   - Código implementado en `feature/clientes`, con pruebas SQLite correctas. Pendientes: validar campos con el negocio, aplicar migración local, comprobar MySQL/MariaDB y revisar navegador/móvil. Ver `documentacion/CLIENTES.md`.
 - [ ] Permisos por operación acordados.
+  - Propuesta de tres roles implementada y probada en `feature/usuarios-permisos` (Persona 4): alta/edición/desactivación de cuentas, cambio seguro de contraseña, permisos en servidor. Pendiente: aprobación del negocio y PR. Ver `documentacion/USUARIOS_Y_PERMISOS.md`.
 - [ ] Revisión móvil y PR documentados.
 
 ## Sprints 3–6 → pendientes
