@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ControladorAutenticacion;
 use App\Http\Controllers\ControladorClientes;
+use App\Http\Controllers\ControladorDashboard; 
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -20,6 +21,7 @@ Route::middleware('auth')->group(function () {
     require __DIR__.'/pagos.php';
     require __DIR__.'/entregas.php';
 
-    Route::view('/panel', 'panel.inicio')->name('panel');
+    Route::get('/panel', [ControladorDashboard::class, 'index'])->name('panel');
+    
     Route::post('/salir', [ControladorAutenticacion::class, 'salir'])->name('sesion.salir');
 });
