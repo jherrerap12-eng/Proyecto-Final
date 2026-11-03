@@ -27,6 +27,9 @@
         <h2 class="h4 mt-4">Pagos y saldos</h2>
         <p class="text-secondary">Registra abonos, verifica los recibidos y consulta el saldo de cada pedido.</p>
         <a href="{{ route('pagos.index') }}" class="btn btn-primary">Abrir pagos</a>
+        <h2 class="h4 mt-4">Reportes del negocio</h2>
+        <p class="text-secondary">Consulta ventas pagadas, ganancia bruta y cobros por período.</p>
+        <a href="{{ route('reportes.index') }}" class="btn btn-primary">Abrir reportes</a>
         
         <h2 class="h4 mt-4">Entregas</h2>
         <p class="text-secondary">Empaca pedidos, registra envíos y confirma su entrega física.</p>
