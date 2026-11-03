@@ -6,6 +6,7 @@ use App\Soporte\Importes;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Pedido extends Model
 {
@@ -41,6 +42,11 @@ class Pedido extends Model
     public function eventos(): HasMany
     {
         return $this->hasMany(EventoPedido::class, 'pedido_id');
+    }
+
+    public function envio(): HasOne
+    {
+        return $this->hasOne(Envio::class, 'pedido_id');
     }
 
     public function pagadoCentavos(bool $bloquear = false): int

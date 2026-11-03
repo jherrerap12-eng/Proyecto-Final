@@ -7,6 +7,7 @@ Aplicación administrativa interna de juguetes vendidos mediante lives y WhatsAp
 En `feature/reportes` se implementan reportes de ventas pagadas, costo/ganancia bruta y cobros, con agrupación diaria/semanal/mensual y CSV. Ver [reglas y verificación de reportes](documentacion/REPORTES.md). La rama parte de main con pedidos y pagos integrados.
 
 Laravel 12 con autenticación, inventario por pieza, clientes y pedidos/pagos integrados en main (`42fcffb`). Incluye pedidos/reservas, registro/verificación de pagos, mínimo 25 %, cancelación/regreso físico, saldos, búsquedas e historial. Sin cuentas predeterminadas ni registro público. Ver [CHECKLIST.md](CHECKLIST.md), [clientes](documentacion/CLIENTES.md), [inventario](documentacion/INVENTARIO.md), [pedidos](documentacion/PEDIDOS_Y_RESERVAS.md) y [guía de integración](documentacion/INTEGRACION_PEDIDOS_PAGOS.md).
+Laravel 12 con autenticación, clientes, inventario, pedidos/reservas y pagos integrados en main mediante PR #3 (42fcffb). Esta rama feature/entregas añade empaque, Forza/mensajería propia, salida física de inventario, confirmación de entrega y seguimiento de regreso. Entregas está probado localmente y pendiente de revisión/commit/PR. Sin cuentas predeterminadas ni registro público. Ver [CHECKLIST.md](CHECKLIST.md), [clientes](documentacion/CLIENTES.md), [inventario](documentacion/INVENTARIO.md), [pedidos](documentacion/PEDIDOS_Y_RESERVAS.md), [pagos](documentacion/INTEGRACION_PEDIDOS_PAGOS.md) y [entregas](documentacion/ENTREGAS.md).
 
 ## Herramientas
 

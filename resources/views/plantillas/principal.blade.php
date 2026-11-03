@@ -14,6 +14,7 @@
             <a class="navbar-brand fw-bold text-primary" href="{{ url('/') }}">Babybu <span class="text-body">Toys</span></a>
             @auth
                 <a class="btn btn-sm {{ request()->routeIs('reportes.*') ? 'btn-primary' : 'btn-outline-primary' }}" href="{{ route('reportes.index') }}" @if(request()->routeIs('reportes.*')) aria-current="page" @endif>Reportes</a>
+                <a class="btn btn-sm {{ request()->routeIs('entregas.*') ? 'btn-primary' : 'btn-outline-primary' }}" href="{{ route('entregas.listar') }}">Entregas</a>
                 <a class="btn btn-sm {{ request()->routeIs('pagos.*') ? 'btn-primary' : 'btn-outline-primary' }}" href="{{ route('pagos.index') }}">Pagos</a>
                 <a class="btn btn-sm {{ request()->routeIs('pedidos.*') ? 'btn-primary' : 'btn-outline-primary' }}" href="{{ route('pedidos.listar') }}">Pedidos</a>
                 <a class="nav-link {{ request()->routeIs('clientes.*') ? 'fw-bold text-primary' : '' }}" href="{{ route('clientes.index') }}" @if(request()->routeIs('clientes.*')) aria-current="page" @endif>Clientes</a>

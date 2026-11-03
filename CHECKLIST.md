@@ -35,11 +35,14 @@ Actualizado: 2026-11-01. Código escrito no equivale a validación del negocio n
 ## Sprints 3–6 → pendientes
 
 - [x] Pedidos/reservas implementados y probados en feature/pedidos; concurrencia comprobada en MariaDB local. Revisión/PR pendientes; MySQL 8 no probado.
-- [x] Cancelación sin doble liberación y regreso físico implementados según reglas aprobadas. Entregas completas pendientes.
-- [x] Interfaz de pagos/verificación integrada localmente y probada con pedidos/reservas; pendiente revisión manual y commit/PR de integracion/pedidos-pagos.
+- [x] Cancelación/regreso integrados con empaque/envío/entrega en feature/entregas, con fechas/responsables; pendiente validación manual y PR.
+- [x] Interfaz de pagos/verificación integrada en main mediante PR #3 (42fcffb), con pedidos/reservas.
 - [x] Migración puente preserva pagos legacy sin verificación automática; pruebas SQLite y MariaDB aprobadas.
 - [ ] Pagos, correcciones y saldos; logística completa.
 - [x] Reportes diarios/semanales/mensuales con ventas pagadas/cobros/ganancia bruta diferenciados, filtros, paginación y CSV implementados en `feature/reportes`. Revisión manual, PR y aprobación pendientes; ver `documentacion/REPORTES.md`.
+- [x] Logística de paquete completo implementada/probada en feature/entregas. Publicación/PR pendientes.
+- [ ] Correcciones/anulaciones de pagos, reembolsos y permisos según reglas por acordar.
+- [ ] Reportes diarios/semanales/mensuales con ventas/cobros/ganancia diferenciados.
 - [ ] Filtros, paginación y Fetch útil.
 - [ ] Seguridad y pruebas integrales; DER final.
 - [ ] Despliegue por Internet y respaldo/restauración.
