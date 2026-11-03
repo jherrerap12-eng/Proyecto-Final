@@ -4,7 +4,9 @@ Aplicación administrativa interna de juguetes vendidos mediante lives y WhatsAp
 
 ## Estado real
 
-Laravel 12 con autenticación, inventario por pieza y clientes integrados en main. La rama integracion/pedidos-pagos reúne pedidos/reservas más registro/verificación de pagos, mínimo 25 %, cancelación/regreso físico, saldos, búsquedas e historial. El encargado autorizó el commit/publicación de esta rama; main todavía no contiene la integración y queda pendiente revisar e integrar su PR. Sin cuentas predeterminadas ni registro público. Ver [CHECKLIST.md](CHECKLIST.md), [clientes](documentacion/CLIENTES.md), [inventario](documentacion/INVENTARIO.md), [pedidos](documentacion/PEDIDOS_Y_RESERVAS.md) y [guía de integración](documentacion/INTEGRACION_PEDIDOS_PAGOS.md).
+En `feature/reportes` se implementan reportes de ventas pagadas, costo/ganancia bruta y cobros, con agrupación diaria/semanal/mensual y CSV. Ver [reglas y verificación de reportes](documentacion/REPORTES.md). La rama parte de main con pedidos y pagos integrados.
+
+Laravel 12 con autenticación, inventario por pieza, clientes y pedidos/pagos integrados en main (`42fcffb`). Incluye pedidos/reservas, registro/verificación de pagos, mínimo 25 %, cancelación/regreso físico, saldos, búsquedas e historial. Sin cuentas predeterminadas ni registro público. Ver [CHECKLIST.md](CHECKLIST.md), [clientes](documentacion/CLIENTES.md), [inventario](documentacion/INVENTARIO.md), [pedidos](documentacion/PEDIDOS_Y_RESERVAS.md) y [guía de integración](documentacion/INTEGRACION_PEDIDOS_PAGOS.md).
 
 ## Herramientas
 

@@ -39,7 +39,7 @@ Actualizado: 2026-11-01. Código escrito no equivale a validación del negocio n
 - [x] Interfaz de pagos/verificación integrada localmente y probada con pedidos/reservas; pendiente revisión manual y commit/PR de integracion/pedidos-pagos.
 - [x] Migración puente preserva pagos legacy sin verificación automática; pruebas SQLite y MariaDB aprobadas.
 - [ ] Pagos, correcciones y saldos; logística completa.
-- [ ] Reportes diarios/semanales/mensuales con ventas/cobros/ganancia diferenciados.
+- [x] Reportes diarios/semanales/mensuales con ventas pagadas/cobros/ganancia bruta diferenciados, filtros, paginación y CSV implementados en `feature/reportes`. Revisión manual, PR y aprobación pendientes; ver `documentacion/REPORTES.md`.
 - [ ] Filtros, paginación y Fetch útil.
 - [ ] Seguridad y pruebas integrales; DER final.
 - [ ] Despliegue por Internet y respaldo/restauración.

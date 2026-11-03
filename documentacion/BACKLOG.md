@@ -8,7 +8,7 @@ Plazo: tres días. Los seis sprints se conservan como bloques previstos, no seis
 | 2 | P0 | Inventario, costos/precios, clientes, formularios/búsquedas/pruebas | Encargado: inventario; compañero: clientes | Integrados en main mediante PR #1 y #2; 25 pruebas aprobadas |
 | 3 | P0 | Pedidos, reservas y concurrencia | Encargado | Implementado/probado en feature/pedidos; revisión manual y PR pendientes |
 | 4 | P0 | Pagos, cancelaciones y logística | Compañero: pagos; logística por asignar | Contrato/base de pagos preparados; formularios/operaciones pendientes; cancelación implementada en pedidos |
-| 5 | P1 | Reportes, filtros, paginación y Fetch | Por asignar | Pendiente |
+| 5 | P1 | Reportes, filtros, paginación y Fetch | Compañero: reportes | Reportes y CSV implementados en feature/reportes; pruebas y revisión documentadas en REPORTES.md. Fetch útil queda pendiente en el alcance general |
 | 6 | P0 | Pruebas, correcciones, documentación, despliegue y defensa | Ambos; demás por definir | Pendiente |
 
 Previsión: día 1 base/Sprint 2; día 2 pedidos/pagos/logística; día 3 reportes/integración/despliegue. Alta presión, no garantía; recortar extras, no integridad. Probar en cada bloque.
