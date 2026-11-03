@@ -162,6 +162,7 @@ class GestionarPedidos
                 $reserva->update(['estado' => 'liberada', 'producto_bloqueado_id' => null, 'liberada_en' => now()]);
             }
             if ($reservas->isNotEmpty()) {
+                $pedido->envio()->whereNull('devuelto_en')->update(['devuelto_en' => now(), 'devuelto_por' => $usuario->id]);
                 $pedido->increment('version');
                 $this->evento($pedido, $usuario, 'devolucion_confirmada', 'El operador confirmó el regreso físico de todas las piezas pendientes.');
             }

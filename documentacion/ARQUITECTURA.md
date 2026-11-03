@@ -19,7 +19,7 @@ erDiagram
     PEDIDO ||--o{ PAGO : recibe
     USER ||--o{ PAGO : registra
     PEDIDO ||--o{ HISTORIAL_ESTADO : conserva
-    PEDIDO ||--o{ ENVIO : gestiona
+    PEDIDO ||--o| ENVIO : tiene
 ```
 
 Producto: código/descripción/costo/precio. Cliente: contacto. Pedido: modalidad/estado. Detalle: cantidad y valores históricos. Reserva: tipo/cantidad/estado. Pago: importe/referencia. Envio: transportista/seguimiento. Movimiento: cantidad/tipo/motivo. Historial: estado/fecha/responsable.
@@ -36,6 +36,10 @@ Además de las tablas estándar Laravel, existen `productos` y `movimientos_inve
 
 Cliente 1:N Pedido; Pedido 1:N DetallePedido/Reserva/EventoPedido/Pago. Cada detalle representa una pieza y conserva código/nombre/costo/precio. Una reserva retiene producto_id histórico y producto_bloqueado_id nullable único para bloquear disponibilidad. Confirmación/cancelación/devolución transaccionales con bloqueos y orden consistente. Mínimo histórico del 25 % por pedido y cálculo en centavos enteros.
 
-Pago es contrato compartido: su interfaz, registro y verificación están adaptados en la rama de integración. Usa monto/fecha_pago, verificación con actor, saldo calculado y compatibilidad de esquema legacy. Ver INTEGRACION_PEDIDOS_PAGOS.md. Reembolsos/anulaciones y ciclo completo de entregas siguen pendientes. El diagrama conceptual conserva Envio/HISTORIAL_ESTADO como entidades futuras; el historial comercial actual usa eventos_pedido.
+Pago usa monto/fecha_pago, verificación con actor, saldo calculado y compatibilidad legacy; integrado en main (PR #3). Ver INTEGRACION_PEDIDOS_PAGOS.md. Reembolsos/anulaciones siguen pendientes; historial comercial usa eventos_pedido.
+
+## Entregas implementadas en rama
+
+Pedido 1:0..1 Envio, con pedido_id único. Envios conserva destino, transporte/guía, fechas de empaque/envío/entrega/regreso y FK de cada responsable a users. La fuente del estado logístico es pedidos.estado_logistico. GestionarEntregas coordina pedido, envío, piezas, reservas y movimientos en transacción con bloqueos. Solo enviar reduce existencia física; entregar no registra cobros. GestionarPedidos anota el regreso en envios/movimientos. Ver ENTREGAS.md.
 
 Pruebas de acceso/reglas: SQLite en memoria. Concurrencia de inventario y pedidos comprobada con conexiones independientes MariaDB e InnoDB sobre tablas clonadas aisladas. MySQL 8 todavía no probado.

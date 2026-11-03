@@ -27,4 +27,10 @@ Un código distinto por cada pieza física, aunque sean juguetes iguales. Invent
 
 Implementado en inventario: dinero DECIMAL; entradas/salidas mediante transacción y bloqueo de fila; referencia única evita repetir el mismo movimiento; versión evita sobrescribir ediciones obsoletas; restricciones MySQL/MariaDB para existencia 0/1. Desactivación conserva la pieza y sus movimientos.
 
-Implementado en pedidos: reservas bajo bloqueo e índice único de pieza bloqueada, operaciones idempotentes y precio/costo históricos por detalle. Disponibilidad es activo + existencia 1 + sin reserva bloqueante. Registro/verificación de pagos y ciclo completo de entregas siguen pendientes. No borrar historial comercial.
+Implementado en pedidos: reservas bajo bloqueo e índice único de pieza bloqueada, operaciones idempotentes y precio/costo históricos por detalle. Disponibilidad es activo + existencia 1 + sin reserva bloqueante. Pagos/verificación están integrados en main; entregas está implementado en su rama. No borrar historial comercial.
+
+## Logística en feature/entregas
+
+Por preparar → empacado → enviado → entregado. Empacar conserva existencia física 1; enviar registra salida -1 por pieza manteniendo bloqueo de reserva. Entregar no retira stock ni declara cobro. Cancelar después de envío/entrega conserva stock 0 hasta regreso físico, que registra entrada +1 y fecha/responsable una sola vez.
+
+Forza requiere guía/referencia; mensajería propia admite referencia opcional. Destinatario/teléfono/dirección se revisan al enviar; mínimo verificado del depósito se revalida. No hay paquetes parciales ni estados externos automáticos. Pago y entrega son independientes.

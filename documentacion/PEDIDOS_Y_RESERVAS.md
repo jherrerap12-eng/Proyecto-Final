@@ -37,8 +37,8 @@ Vite compiló 61 módulos. Listado/formulario/detalle comprobados a 360/1280 px 
 
 ## Pendientes y coordinación
 
-No hay formularios para registrar/verificar abonos: la reserva firme queda bloqueada si no existen pagos reales verificados. Las pruebas de firme usan fixtures exclusivamente en bases de prueba. El compañero debe seguir CONTRATO_PAGOS.md y crear feature/pagos después de integrar esta base.
+Registro/verificación de pagos ya está integrado en main mediante PR #3. La confirmación firme exige pagos reales verificados; las pruebas usan fixtures exclusivamente en bases de prueba. Ver INTEGRACION_PEDIDOS_PAGOS.md.
 
-Logística expone solo su estado actual: por_preparar, empacado, enviado o entregado. No hay todavía interfaz/ciclo completo de entregas. Ese módulo deberá registrar salida física y estado de manera atómica, conservando el bloqueo correspondiente; los tests simulan envío para probar cancelación/regreso. No se implementaron devoluciones/cancelaciones parciales.
+Feature/entregas implementa la interfaz y ciclo por_preparar, empacado, enviado y entregado. Envío registra salida física atómica y regreso registra entrada una sola vez. Está probado y pendiente de revisión/PR; ver ENTREGAS.md. No se implementaron devoluciones/cancelaciones parciales.
 
 Usuarios autenticados mantienen acceso interno común; permisos diferenciados y reembolsos requieren definición. Navegación/panel y comprobaciones de inventario son los cambios compartidos a conservar al integrar.
