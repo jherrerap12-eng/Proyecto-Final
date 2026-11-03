@@ -42,7 +42,7 @@
         <section class="card border-0 shadow-sm rounded-4">
             <div class="card-body p-4">
                 <h2 class="h5">Registrar movimiento</h2>
-                <p class="text-secondary small">Entradas y salidas manuales de esta pieza. Los pedidos y reservas se incorporarán en su módulo.</p>
+                <p class="text-secondary small">Entradas y salidas manuales de esta pieza. Los envíos y regresos de pedidos se registran desde su seguimiento.</p>
                 @if ($producto->activo && ! $producto->reservaActual)
                 <form method="POST" action="{{ route('inventario.ajustar', $producto) }}" data-envio-unico>
                     @csrf

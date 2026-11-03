@@ -18,6 +18,7 @@ Route::middleware('auth')->group(function () {
     require __DIR__.'/inventario.php';
     require __DIR__.'/pedidos.php';
     require __DIR__.'/pagos.php';
+    require __DIR__.'/entregas.php';
 
     Route::view('/panel', 'panel.inicio')->name('panel');
     Route::post('/salir', [ControladorAutenticacion::class, 'salir'])->name('sesion.salir');

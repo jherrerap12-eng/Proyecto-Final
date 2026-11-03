@@ -1,5 +1,15 @@
 # Verificación real
 
+## Entregas — 2026-11-02
+
+Main integrado 42fcffb y origin/main coincidían; base limpia. Feature/entregas creada localmente sin commits/publicación. Base: 52 pruebas/517 comprobaciones.
+
+Suite posterior: 66 pruebas/654 comprobaciones aprobadas en SQLite en memoria. Migración 000400 revisada con --pretend y aplicada (lote 6), crea envios sin modificar otras tablas. Cinco rutas bajo auth.
+
+MariaDB: doble envío, cancelar antes de enviar, cancelación con formulario obsoleto y doble entrega aprobados con conexiones independientes. Salida física única, sin cobro ficticio, regreso una sola vez. Clones aleatorios eliminados al finalizar, sin fixtures en tablas reales.
+
+Pint aplicado. Vistas ficticias de listado y seis estados a 1280/360 px, sin desbordamiento de página ni errores JS. Capturas de listado, formulario, ficha y cancelación revisadas. Pendiente validación manual, revisión de otro integrante y commit/PR. No se implementaron API, paquetes parciales, reportes o permisos diferenciados.
+
 ## Integración de pedidos y pagos — 2026-11-02
 
 Ramas origen: pedidos 62b3070 y pagos e545106. Unión local preparada en integracion/pedidos-pagos, con main intacta y commit/publicación pendientes. Se resolvieron conflictos en modelo Pago, menú, panel, rutas y checklist. Esquema canónico y migración puente conservan datos originales y no auto-verifican abonos.
