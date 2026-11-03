@@ -47,7 +47,7 @@
     @endforeach
     </tbody></table></div>
 </section>
-@if (in_array($pedido->estado, ['borrador', 'confirmado'], true))
+@if (in_array($pedido->estado, ['borrador', 'confirmado'], true) && auth()->user()->can('cancelar-pedidos'))
 <section class="card border-0 shadow-sm rounded-4 mt-4"><div class="card-body p-4">
     <h2 class="h5">Cancelar pedido</h2><p class="small text-secondary">Antes del envío, las piezas se liberan. Si ya se enviaron, quedarán pendientes de regreso físico. Los pagos no se borran ni se reembolsan automáticamente.</p>
     <form method="POST" action="{{ route('pedidos.cancelar', $pedido) }}" class="row g-3 align-items-end" data-envio-unico>@csrf<input type="hidden" name="version" value="{{ $pedido->version }}"><div class="col-md-9"><label for="motivo" class="form-label">Motivo de cancelación</label><input id="motivo" name="motivo" class="form-control" required maxlength="255" value="{{ old('motivo') }}"></div><div class="col-md-3"><button type="submit" class="btn btn-outline-danger">Cancelar pedido</button></div></form>

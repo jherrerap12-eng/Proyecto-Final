@@ -49,7 +49,7 @@
                 @elseif ($pago->verificado_en && $pago->verificado_por)<span class="badge text-bg-success">Verificado</span><div class="small">{{ $pago->verificador?->name }} · {{ $pago->verificado_en->format('d/m/Y H:i') }}</div>
                 @else
                     <span class="badge text-bg-warning">Pendiente</span>
-                    @if ($pedido->estado !== 'cancelado' && ($pedido->estado !== 'borrador' || $pedido->modalidad === 'deposito'))
+                    @if ($pedido->estado !== 'cancelado' && ($pedido->estado !== 'borrador' || $pedido->modalidad === 'deposito') && auth()->user()->can('verificar-pagos'))
                     <form method="POST" action="{{ route('pagos.verificar', $pago) }}" class="mt-2" data-envio-unico>@csrf<div class="form-check small mb-2"><input class="form-check-input" id="verificar-{{ $pago->id }}" name="confirmar_verificacion" type="checkbox" value="1" required><label class="form-check-label" for="verificar-{{ $pago->id }}">He comprobado la recepción de este abono.</label></div><button type="submit" class="btn btn-outline-primary btn-sm">Verificar abono</button></form>
                     @endif
                 @endif

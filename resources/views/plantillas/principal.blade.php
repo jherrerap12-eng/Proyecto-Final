@@ -19,8 +19,12 @@
                 <a class="btn btn-sm {{ request()->routeIs('pedidos.*') ? 'btn-primary' : 'btn-outline-primary' }}" href="{{ route('pedidos.listar') }}">Pedidos</a>
                 <a class="nav-link {{ request()->routeIs('clientes.*') ? 'fw-bold text-primary' : '' }}" href="{{ route('clientes.index') }}" @if(request()->routeIs('clientes.*')) aria-current="page" @endif>Clientes</a>
                 <a class="btn btn-sm {{ request()->routeIs('inventario.*') ? 'btn-primary' : 'btn-outline-primary' }}" href="{{ route('inventario.listar') }}">Inventario</a>
+                @can('administrar-usuarios')
+                <a class="btn btn-sm {{ request()->routeIs('usuarios.*') ? 'btn-primary' : 'btn-outline-primary' }}" href="{{ route('usuarios.index') }}">Usuarios</a>
+                @endcan
                 <div class="d-flex align-items-center gap-3 ms-auto">
-                    <span class="small d-none d-sm-inline">{{ auth()->user()->name }}</span>
+                    <a class="small text-decoration-none d-none d-sm-inline" href="{{ route('cuenta.contrasena') }}" title="Cambiar mi contraseña">{{ auth()->user()->name }} · {{ auth()->user()->nombreRol() }}</a>
+                    <a class="small d-sm-none" href="{{ route('cuenta.contrasena') }}">Mi cuenta</a>
                     <form action="{{ route('sesion.salir') }}" method="POST">
                         @csrf
                         <button class="btn btn-outline-secondary btn-sm" type="submit">Cerrar sesión</button>

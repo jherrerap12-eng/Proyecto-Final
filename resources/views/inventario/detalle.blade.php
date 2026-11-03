@@ -43,7 +43,9 @@
             <div class="card-body p-4">
                 <h2 class="h5">Registrar movimiento</h2>
                 <p class="text-secondary small">Entradas y salidas manuales de esta pieza. Los envíos y regresos de pedidos se registran desde su seguimiento.</p>
-                @if ($producto->activo && ! $producto->reservaActual)
+                @if (auth()->user()->cannot('ajustar-inventario'))
+                    <p class="text-secondary mb-0">Tu rol no permite ajustes manuales de inventario. Solicítalo a un supervisor o administrador.</p>
+                @elseif ($producto->activo && ! $producto->reservaActual)
                 <form method="POST" action="{{ route('inventario.ajustar', $producto) }}" data-envio-unico>
                     @csrf
                     <input type="hidden" name="referencia" value="{{ old('referencia', $referencia) }}">

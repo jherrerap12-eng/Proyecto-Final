@@ -21,6 +21,7 @@ Route::middleware('auth')->group(function () {
     require __DIR__.'/pagos.php';
     require __DIR__.'/reportes.php';
     require __DIR__.'/entregas.php';
+    require __DIR__.'/usuarios.php';
 
     Route::get('/panel', [ControladorDashboard::class, 'index'])->name('panel');
     

@@ -11,6 +11,6 @@ Route::prefix('inventario')->name('inventario.')->controller(ControladorInventar
     Route::get('/{producto}', 'mostrar')->whereNumber('producto')->name('mostrar');
     Route::get('/{producto}/editar', 'editar')->whereNumber('producto')->name('editar');
     Route::put('/{producto}', 'actualizar')->whereNumber('producto')->name('actualizar');
-    Route::post('/{producto}/movimientos', 'ajustar')->whereNumber('producto')->name('ajustar');
+    Route::post('/{producto}/movimientos', 'ajustar')->whereNumber('producto')->middleware('can:ajustar-inventario')->name('ajustar');
     Route::patch('/{producto}/estado', 'cambiarEstado')->whereNumber('producto')->name('estado');
 });
