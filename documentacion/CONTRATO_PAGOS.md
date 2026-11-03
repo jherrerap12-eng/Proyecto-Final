@@ -32,7 +32,7 @@ Orden compartido de bloqueos: pedido → piezas por ID → reservas, cuando corr
 
 Política validada: 25 % guardado por pedido, redondeado al centavo superior. Total Q 100.01 requiere Q 25.01. Un borrador con pagos ya registrados no se edita, para conservar el importe acordado.
 
-No permitir anular/corregir pagos dejando una reserva firme sin mínimo; acordar flujo explícito, por ejemplo cancelar el pedido antes. Reembolsos y permisos diferenciados siguen pendientes de definición.
+No permitir anular/corregir pagos dejando una reserva firme sin mínimo; acordar flujo explícito, por ejemplo cancelar el pedido antes. Implementado en `CorregirPago` (ver CORRECCIONES_PAGOS.md). Reembolsos y permisos diferenciados siguen pendientes de definición.
 
 ## Entrega
 

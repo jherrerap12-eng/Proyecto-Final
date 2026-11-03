@@ -14,7 +14,7 @@ Tres usuarios internos. Código corto manual. Depósito previo confirmado produc
 6. Costos por pieza/lote, descuentos, transporte/comisiones. Sin gastos completos solo hay ganancia bruta.
 7. Fecha del reporte y comienzo de semana; ventas distintas de cobros.
 8. Permisos de costos, ajustes, cancelaciones y correcciones de pagos. Propuesta implementada en `feature/usuarios-permisos` (ver [USUARIOS_Y_PERMISOS.md](USUARIOS_Y_PERMISOS.md)); pendiente de aprobación del negocio.
-9. Métodos de pago, reembolsos y sobrepagos.
+9. Métodos de pago, reembolsos y sobrepagos. Corrección/anulación de abonos implementada en `feature/correcciones-pagos` conservando historial; reembolsos siguen sin regla (propuesta en [CORRECCIONES_PAGOS.md](CORRECCIONES_PAGOS.md)).
 10. GTQ y America/Guatemala propuestos a confirmar.
 
 ## Decisión validada por el encargado

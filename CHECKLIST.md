@@ -43,6 +43,7 @@ Actualizado: 2026-11-01. Código escrito no equivale a validación del negocio n
 - [x] Reportes diarios/semanales/mensuales con ventas pagadas/cobros/ganancia bruta diferenciados, filtros, paginación y CSV implementados en `feature/reportes`. Revisión manual, PR y aprobación pendientes; ver `documentacion/REPORTES.md`.
 - [x] Logística de paquete completo implementada/probada en feature/entregas. Publicación/PR pendientes.
 - [ ] Correcciones/anulaciones de pagos, reembolsos y permisos según reglas por acordar.
+  - Correcciones y anulaciones con historial y protección del mínimo de reserva firme implementadas y probadas en `feature/correcciones-pagos` (Persona 4). Pendientes: PR, prueba concurrente MySQL/MariaDB y regla de reembolsos. Ver `documentacion/CORRECCIONES_PAGOS.md`.
 - [ ] Reportes diarios/semanales/mensuales con ventas/cobros/ganancia diferenciados.
 - [ ] Filtros, paginación y Fetch útil.
 - [ ] Seguridad y pruebas integrales; DER final.

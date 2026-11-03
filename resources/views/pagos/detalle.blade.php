@@ -40,12 +40,14 @@
     <div class="card-body"><h2 class="h4 mb-0">Historial de abonos</h2></div>
     <p class="small text-secondary d-md-none px-3">Desliza la tabla para consultar el historial completo.</p>
     <div class="table-responsive"><table class="table align-middle mb-0">
-        <thead class="table-light"><tr><th scope="col">Fecha</th><th scope="col">Importe</th><th scope="col">Método / referencia</th><th scope="col">Responsable</th><th scope="col">Estado / verificación</th><th scope="col">Observaciones</th></tr></thead><tbody>
+        <thead class="table-light"><tr><th scope="col">Fecha</th><th scope="col">Importe</th><th scope="col">Método / referencia</th><th scope="col">Responsable</th><th scope="col">Estado / verificación</th><th scope="col">Observaciones</th>@can('corregir-pagos')<th scope="col">Correcciones</th>@endcan</tr></thead><tbody>
         @forelse ($pagos as $pago)
             <tr><td class="text-nowrap">{{ $pago->fecha_pago->format('d/m/Y') }}</td><td class="text-nowrap">Q {{ $pago->monto }}</td>
                 <td>{{ ['efectivo' => 'Efectivo', 'transferencia' => 'Transferencia', 'deposito' => 'Depósito'][$pago->metodo] ?? $pago->metodo }}<div class="small">{{ $pago->referencia ?? 'Sin referencia' }}</div></td>
                 <td>{{ $pago->usuario->name }}</td><td>
                 @if ($pago->anulado_en)<span class="badge text-bg-secondary">Anulado</span>
+                    <div class="small">{{ $pago->anulador?->name ?? 'Sin responsable registrado' }} · {{ $pago->anulado_en->format('d/m/Y H:i') }}</div>
+                    @if ($pago->motivo_anulacion)<div class="small text-break text-secondary">{{ $pago->motivo_anulacion }}</div>@endif
                 @elseif ($pago->verificado_en && $pago->verificado_por)<span class="badge text-bg-success">Verificado</span><div class="small">{{ $pago->verificador?->name }} · {{ $pago->verificado_en->format('d/m/Y H:i') }}</div>
                 @else
                     <span class="badge text-bg-warning">Pendiente</span>
@@ -53,8 +55,33 @@
                     <form method="POST" action="{{ route('pagos.verificar', $pago) }}" class="mt-2" data-envio-unico>@csrf<div class="form-check small mb-2"><input class="form-check-input" id="verificar-{{ $pago->id }}" name="confirmar_verificacion" type="checkbox" value="1" required><label class="form-check-label" for="verificar-{{ $pago->id }}">He comprobado la recepción de este abono.</label></div><button type="submit" class="btn btn-outline-primary btn-sm">Verificar abono</button></form>
                     @endif
                 @endif
-                </td><td class="text-break">{{ $pago->observaciones ?? 'Sin observaciones' }}</td></tr>
-        @empty <tr><td colspan="6" class="p-4 text-center text-secondary">Aún no se han registrado abonos.</td></tr>
+                @if ($pago->corrige_pago_id)<div class="small text-secondary">Corrige al abono #{{ $pago->corrige_pago_id }}</div>@endif
+                </td><td class="text-break">{{ $pago->observaciones ?? 'Sin observaciones' }}</td>
+                @can('corregir-pagos')
+                <td>
+                    @if (! $pago->anulado_en)
+                        @if (in_array($pedido->estado, ['borrador', 'confirmado'], true) && ($pedido->estado !== 'borrador' || $pedido->modalidad === 'deposito'))
+                        <a class="btn btn-sm btn-outline-primary mb-2" href="{{ route('pagos.corregir', $pago) }}">Corregir</a>
+                        @endif
+                        @if ($pedido->estado !== 'cancelado' || ! $pago->verificado_en)
+                        <details><summary class="small text-danger">Anular</summary>
+                            <form method="POST" action="{{ route('pagos.anular', $pago) }}" class="mt-2" data-envio-unico>@csrf
+                                <label for="motivo-{{ $pago->id }}" class="form-label small">Motivo</label>
+                                <input id="motivo-{{ $pago->id }}" name="motivo" class="form-control form-control-sm mb-2" required minlength="5" maxlength="300">
+                                <div class="form-check small mb-2"><input class="form-check-input" id="anular-{{ $pago->id }}" name="confirmar_anulacion" type="checkbox" value="1" required><label class="form-check-label" for="anular-{{ $pago->id }}">Anular este abono; seguirá visible en el historial.</label></div>
+                                <button type="submit" class="btn btn-outline-danger btn-sm">Confirmar anulación</button>
+                            </form>
+                        </details>
+                        @else
+                        <span class="small text-secondary">Requiere regla de reembolso</span>
+                        @endif
+                    @elseif ($pago->correccion)
+                        <span class="small text-secondary">Reemplazado por #{{ $pago->correccion->id }}</span>
+                    @endif
+                </td>
+                @endcan
+                </tr>
+        @empty <tr><td colspan="7" class="p-4 text-center text-secondary">Aún no se han registrado abonos.</td></tr>
         @endforelse
         </tbody></table></div>
     @if ($pagos->hasPages())<div class="card-body">{{ $pagos->links('pagination::bootstrap-5') }}</div>@endif
