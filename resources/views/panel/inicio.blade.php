@@ -79,6 +79,9 @@
                         Por preparar <span class="badge bg-warning text-dark rounded-pill">{{ $pedidosPorPreparar }}</span>
                     </li>
                     <li class="list-group-item d-flex justify-content-between align-items-center px-0">
+                        Empacados <span class="badge bg-secondary rounded-pill">{{ $pedidosEmpacados }}</span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center px-0">
                         Enviados <span class="badge bg-info text-dark rounded-pill">{{ $pedidosEnviados }}</span>
                     </li>
                     <li class="list-group-item d-flex justify-content-between align-items-center px-0">
@@ -99,7 +102,7 @@
                         Disponibles <span class="badge bg-primary rounded-pill">{{ $piezasDisponibles }}</span>
                     </li>
                     <li class="list-group-item d-flex justify-content-between align-items-center px-0">
-                        Reservadas <span class="badge bg-secondary rounded-pill">{{ $piezasReservadas }}</span>
+                        Reservadas en el negocio <span class="badge bg-secondary rounded-pill">{{ $piezasReservadas }}</span>
                     </li>
                 </ul>
             </div>
@@ -111,7 +114,7 @@
         <div class="card border-0 shadow-sm rounded-4 h-100">
             <div class="card-body p-4 text-center d-flex flex-column justify-content-center">
                 <h2 class="h5 fw-bold mb-2 text-danger">Saldos por Cobrar</h2>
-                <p class="text-secondary small mb-2">Pendiente de pago en pedidos</p>
+                <p class="text-secondary small mb-2">Saldo de pedidos confirmados, descontando pagos verificados</p>
                 <h3 class="fw-bold text-danger mb-0">Q {{ number_format($saldosPorCobrar ?? 0, 2) }}</h3>
             </div>
         </div>
@@ -119,7 +122,7 @@
 </div>
 
 <!-- Estado Vacío condicional -->
-@if(($pedidosPorPreparar + $pedidosEnviados + $pedidosEntregados) === 0)
+@if(($pedidosPorPreparar + $pedidosEmpacados + $pedidosEnviados + $pedidosEntregados) === 0)
     <div class="alert alert-secondary text-center py-4 rounded-4 mb-4" role="alert">
         <h5 class="alert-heading">No hay actividad reciente en el sistema</h5>
         <p class="mb-0">Comienza registrando clientes, piezas o pedidos para visualizar las estadísticas completas.</p>
