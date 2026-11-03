@@ -6,19 +6,21 @@ Implementación de RF11 y consultas RF12 en `feature/reportes`, desde `origin/ma
 
 | Indicador | Cálculo |
 |---|---|
-| Venta pagada | Pedido con `estado=confirmado`, `confirmado_en` no nulo, total positivo y suma de pagos válidos mayor o igual al total |
+| Venta (criterio único, acordado 2026-11-02) | Pedido con `estado=confirmado`, `confirmado_en` no nulo, total positivo, `estado_logistico=entregado` y suma de pagos válidos mayor o igual al total. Es la misma definición del panel (`ConsultarReportes::totalesHistoricos`) |
 | Pago válido | `verificado_en` y `verificado_por` no nulos, `anulado_en` nulo |
-| Fecha de venta | Mayor entre confirmación del pedido y última verificación de los abonos válidos que completaron el total |
+| Fecha de venta | La más reciente entre confirmación, última verificación de los abonos válidos y entrega física (`envios.entregado_en`) |
 | Ventas | Suma de `pedidos.total` de las ventas reconocidas dentro del rango |
 | Costo histórico | Suma de `detalles_pedido.costo` de esas ventas |
 | Ganancia bruta | Suma de `detalles_pedido.precio - detalles_pedido.costo` de esas ventas |
 | Cobros | Suma de pagos válidos por `fecha_pago`, incluidos los de pedidos parciales, borradores con depósito y cancelados |
+| Reembolsos | Suma de `reembolsos.monto` por `fecha_reembolso` |
+| Cobro neto | Cobros − reembolsos del mismo período |
 
 El esquema actual impide sobrepagos y congela total/detalles una vez que existen pagos, por lo que la última verificación vigente identifica la finalización del pago. Si se añaden sobrepagos, descuentos o reaperturas, revisar esta regla y la relación entre total y precios históricos antes de cambiar el contrato. Actualmente el total es la suma de precios históricos y cada detalle representa una pieza.
 
 No se consultan precios/costos actuales de productos ni el nombre actual del cliente: se conserva `cliente_nombre` del pedido. Una baja lógica del cliente no elimina su historial. Se admiten ganancias negativas y se conserva su signo.
 
-Un pedido gratuito sin abonos no cuenta como venta pagada. Borradores y cancelados no generan venta ni ganancia. Cancelar un pedido pagado lo excluye retroactivamente de ventas, pero conserva sus cobros: no se inventa un reembolso. El reporte refleja los registros vigentes al consultar; no constituye un cierre contable inmutable. Una verificación posterior puede incorporar cobros a una fecha de pago anterior, y anulaciones/cancelaciones pueden cambiar períodos pasados.
+Un pedido gratuito sin abonos no cuenta como venta pagada. Borradores y cancelados no generan venta ni ganancia. Cancelar un pedido pagado lo excluye retroactivamente de ventas, pero conserva sus cobros; si se devuelve dinero, se registra como reembolso y se resta en el cobro neto. Un pedido pagado y aún no entregado, o entregado sin pagar completo, todavía no es venta. El reporte refleja los registros vigentes al consultar; no constituye un cierre contable inmutable. Una verificación posterior puede incorporar cobros a una fecha de pago anterior, y anulaciones/cancelaciones pueden cambiar períodos pasados.
 
 La ganancia es bruta: no descuenta transporte, comisiones u otros gastos operativos y no debe presentarse como utilidad neta.
 

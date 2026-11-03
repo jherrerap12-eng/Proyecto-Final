@@ -43,7 +43,7 @@ Actualizado: 2026-11-01. Código escrito no equivale a validación del negocio n
 - [x] Reportes diarios/semanales/mensuales con ventas pagadas/cobros/ganancia bruta diferenciados, filtros, paginación y CSV implementados en `feature/reportes`. Revisión manual, PR y aprobación pendientes; ver `documentacion/REPORTES.md`.
 - [x] Logística de paquete completo implementada/probada en feature/entregas. Publicación/PR pendientes.
 - [ ] Correcciones/anulaciones de pagos, reembolsos y permisos según reglas por acordar.
-  - Correcciones y anulaciones con historial y protección del mínimo de reserva firme implementadas y probadas en `feature/correcciones-pagos` (Persona 4). Pendientes: PR, prueba concurrente MySQL/MariaDB y regla de reembolsos. Ver `documentacion/CORRECCIONES_PAGOS.md`.
+  - Correcciones y anulaciones con historial y protección del mínimo de reserva firme implementadas y probadas en `feature/correcciones-pagos` (Persona 4). Reembolsos parciales/totales implementados en `feature/reembolsos-ventas`. Pendientes: PR y prueba concurrente MySQL/MariaDB. Ver `documentacion/CORRECCIONES_PAGOS.md`.
 - [ ] Reportes diarios/semanales/mensuales con ventas/cobros/ganancia diferenciados.
 - [ ] Filtros, paginación y Fetch útil.
 - [ ] Seguridad y pruebas integrales; DER final.
@@ -54,3 +54,11 @@ Actualizado: 2026-11-01. Código escrito no equivale a validación del negocio n
 ## Condicionados y evidencias
 
 API REST independiente y CI/CD no son obligaciones universales de la guía. Trabajar dos inicialmente no elimina el requisito académico de cinco integrantes. Base publicada en el commit inicial `a4c5fed`; el encargado validó inventario y autorizó su commit/publicación en rama. PR, revisión de otro integrante, invitaciones, tablero y despliegue siguen sin acreditarse aquí. Ver `documentacion/VERIFICACION.md` para resultados técnicos reales.
+
+## Cierre de pendientes del equipo — 2026-11-02 (Persona 4, rama `feature/reembolsos-ventas`)
+
+- [x] Reembolsos con regla acordada (parcial o total, cancelados, tras regreso físico, solo administrador).
+- [x] Criterio único de venta: entregada y pagada, compartido por panel y reportes; cobro neto descuenta reembolsos.
+- [x] Pruebas finales de integración por rol (`tests/Feature/FlujoCompletoTest.php`): recorridos completos con rechazos, cancelación tras envío, regreso físico, reembolso, corrección y desactivación de cuenta.
+- [ ] PR revisado por otro integrante y prueba manual en navegador.
+

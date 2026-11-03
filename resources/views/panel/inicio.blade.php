@@ -51,7 +51,7 @@
     <div class="col-md-6">
         <div class="card border-0 shadow-sm rounded-4">
             <div class="card-body p-4">
-                <h5 class="card-title text-secondary fs-6">Ventas Totales (Entregadas)</h5>
+                <h5 class="card-title text-secondary fs-6">Ventas (entregadas y pagadas)</h5>
                 <p class="display-6 fw-bold text-primary mb-0">
                     Q {{ number_format($resumenVentas->total_ventas ?? 0, 2) }}
                 </p>

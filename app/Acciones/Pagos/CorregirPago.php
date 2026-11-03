@@ -26,7 +26,7 @@ class CorregirPago
             }
             $verificado = $this->estaVerificado($pago);
             if ($verificado && $pedido->estado === 'cancelado') {
-                $this->error('No se anula un abono verificado de un pedido cancelado: devolver el dinero es un reembolso y requiere la regla acordada con el negocio.');
+                $this->error('No se anula un abono verificado de un pedido cancelado: para devolver el dinero, registra un reembolso en la ficha de pagos del pedido.');
             }
             if ($verificado) {
                 $this->protegerReservaFirme($pedido, $pedido->pagadoCentavos(bloquear: true) - Importes::aCentavos($pago->monto));
@@ -62,7 +62,7 @@ class CorregirPago
                     $this->error('El abono ya está anulado. Si falta registrar el importe correcto, regístralo como abono nuevo.');
                 }
                 if (! in_array($pedido->estado, ['borrador', 'confirmado'], true) || ($pedido->estado === 'borrador' && $pedido->modalidad !== 'deposito')) {
-                    $this->error('Solo se corrigen abonos de pedidos que todavía admiten pagos. En un pedido cancelado, anula el abono pendiente o espera la regla de reembolsos.');
+                    $this->error('Solo se corrigen abonos de pedidos que todavía admiten pagos. En un pedido cancelado, anula el abono pendiente o registra un reembolso.');
                 }
 
                 $verificarNuevo = (bool) ($datos['verificar'] ?? false);

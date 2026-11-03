@@ -5,7 +5,7 @@
 <div class="mb-4">
     <span class="insignia-marca mb-3">REPORTES DEL NEGOCIO</span>
     <h1 class="fw-bold">Ventas, ganancia y cobros</h1>
-    <p class="text-secondary">Las ventas cuentan al completar el pago verificado de un pedido confirmado. Los cobros se muestran por la fecha de cada abono.</p>
+    <p class="text-secondary">Una venta cuenta cuando el pedido está entregado y pagado por completo con abonos verificados; es el mismo criterio del panel. Los cobros se muestran por la fecha de cada abono y los reembolsos por la fecha de la devolución.</p>
 </div>
 <form action="{{ route('reportes.index') }}" method="GET" class="card border-0 shadow-sm mb-4">
     <div class="card-body p-4">
@@ -40,12 +40,12 @@
     </div>
 </form>
 <div class="row g-3 mb-4">
-    @foreach(['ventas' => 'Ventas pagadas', 'costos' => 'Costo histórico', 'ganancia' => 'Ganancia bruta', 'cobros' => 'Cobros verificados'] as $campo => $etiqueta)
-        <div class="col-sm-6 col-xl-3"><div class="card h-100 border-0 shadow-sm"><div class="card-body"><h2 class="h6 text-secondary">{{ $etiqueta }}</h2><p class="h4 text-break mb-0">{{ $dinero($resumen['totales'][$campo]) }}</p></div></div></div>
+    @foreach(['ventas' => 'Ventas (entregadas y pagadas)', 'costos' => 'Costo histórico', 'ganancia' => 'Ganancia bruta', 'cobros' => 'Cobros verificados', 'reembolsos' => 'Reembolsos', 'cobro_neto' => 'Cobro neto'] as $campo => $etiqueta)
+        <div class="col-sm-6 col-xl-4"><div class="card h-100 border-0 shadow-sm"><div class="card-body"><h2 class="h6 text-secondary">{{ $etiqueta }}</h2><p class="h4 text-break mb-0">{{ $dinero($resumen['totales'][$campo]) }}</p></div></div></div>
     @endforeach
 </div>
 <p><strong>{{ $resumen['totales']['pedidos'] }}</strong> pedido(s) vendido(s) en el período. La ganancia bruta descuenta el costo histórico de las piezas; no incluye gastos operativos.</p>
-<div class="alert alert-info" role="note">Se excluyen ventas canceladas y pagos pendientes o anulados. Los cobros de pedidos cancelados se conservan: cancelar no equivale a reembolsar. Estos reportes se recalculan con el estado actual y pueden cambiar al verificar, anular o cancelar operaciones.</div>
+<div class="alert alert-info" role="note">Se excluyen ventas canceladas, pedidos aún no entregados y pagos pendientes o anulados. Los cobros de pedidos cancelados se conservan; lo devuelto aparece como reembolso y se resta en el cobro neto. Estos reportes se recalculan con el estado actual y pueden cambiar al verificar, anular o cancelar operaciones.</div>
 <section class="mb-5" aria-labelledby="titulo-resumen">
     <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
         <h2 id="titulo-resumen" class="h4 mb-0">Resumen por período</h2>
@@ -53,16 +53,16 @@
     </div>
     <div class="card border-0 shadow-sm"><div class="table-responsive">
         <table class="table align-middle mb-0">
-            <caption class="px-3">Solo se muestran períodos con ventas o cobros. Los extremos se limitan al rango seleccionado.</caption>
-            <thead><tr><th scope="col">Desde</th><th scope="col">Hasta</th><th scope="col">Pedidos vendidos</th><th scope="col">Ventas</th><th scope="col">Costo histórico</th><th scope="col">Ganancia bruta</th><th scope="col">Cobros</th></tr></thead>
+            <caption class="px-3">Solo se muestran períodos con ventas, cobros o reembolsos. Los extremos se limitan al rango seleccionado.</caption>
+            <thead><tr><th scope="col">Desde</th><th scope="col">Hasta</th><th scope="col">Pedidos vendidos</th><th scope="col">Ventas</th><th scope="col">Costo histórico</th><th scope="col">Ganancia bruta</th><th scope="col">Cobros</th><th scope="col">Reembolsos</th><th scope="col">Cobro neto</th></tr></thead>
             <tbody>
                 @forelse($resumen['periodos'] as $periodo)
-                    <tr><th scope="row">{{ $periodo['desde'] }}</th><td>{{ $periodo['hasta'] }}</td><td>{{ $periodo['pedidos'] }}</td>@foreach(['ventas', 'costos', 'ganancia', 'cobros'] as $campo)<td class="text-nowrap">{{ $dinero($periodo[$campo]) }}</td>@endforeach</tr>
+                    <tr><th scope="row">{{ $periodo['desde'] }}</th><td>{{ $periodo['hasta'] }}</td><td>{{ $periodo['pedidos'] }}</td>@foreach(['ventas', 'costos', 'ganancia', 'cobros', 'reembolsos', 'cobro_neto'] as $campo)<td class="text-nowrap">{{ $dinero($periodo[$campo]) }}</td>@endforeach</tr>
                 @empty
-                    <tr><td colspan="7" class="p-4 text-center text-secondary">No hay ventas ni cobros verificados en este período.</td></tr>
+                    <tr><td colspan="9" class="p-4 text-center text-secondary">No hay ventas, cobros ni reembolsos en este período.</td></tr>
                 @endforelse
             </tbody>
-            <tfoot><tr><th scope="row" colspan="2">Total del período</th><td>{{ $resumen['totales']['pedidos'] }}</td>@foreach(['ventas', 'costos', 'ganancia', 'cobros'] as $campo)<td class="text-nowrap fw-bold">{{ $dinero($resumen['totales'][$campo]) }}</td>@endforeach</tr></tfoot>
+            <tfoot><tr><th scope="row" colspan="2">Total del período</th><td>{{ $resumen['totales']['pedidos'] }}</td>@foreach(['ventas', 'costos', 'ganancia', 'cobros', 'reembolsos', 'cobro_neto'] as $campo)<td class="text-nowrap fw-bold">{{ $dinero($resumen['totales'][$campo]) }}</td>@endforeach</tr></tfoot>
         </table>
     </div></div>
 </section>
@@ -79,7 +79,7 @@
                 @forelse($ventas as $venta)
                     <tr><th scope="row">#{{ $venta->pedido_id }}</th><td>{{ $venta->cliente_nombre }}</td><td class="text-nowrap">{{ $venta->fecha_venta }}</td><td class="text-nowrap">{{ $dinero($venta->total_centavos) }}</td><td class="text-nowrap">{{ $dinero($venta->costo_centavos) }}</td><td class="text-nowrap">{{ $dinero($venta->ganancia_centavos) }}</td></tr>
                 @empty
-                    <tr><td colspan="6" class="p-4 text-center text-secondary">No hay ventas pagadas en este período.</td></tr>
+                    <tr><td colspan="6" class="p-4 text-center text-secondary">No hay ventas entregadas y pagadas en este período.</td></tr>
                 @endforelse
             </tbody>
         </table>
@@ -90,6 +90,7 @@
     <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
         <h2 id="titulo-cobros" class="h4 mb-0">Detalle de cobros</h2>
         <a class="btn btn-outline-primary btn-sm" href="{{ route('reportes.exportar', array_merge($filtros, ['tipo' => 'cobros'])) }}">Descargar cobros CSV</a>
+        <a class="btn btn-outline-primary btn-sm" href="{{ route('reportes.exportar', array_merge($filtros, ['tipo' => 'reembolsos'])) }}">Descargar reembolsos CSV</a>
     </div>
     <div class="card border-0 shadow-sm"><div class="table-responsive">
         <table class="table align-middle mb-0">

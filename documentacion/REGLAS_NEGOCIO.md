@@ -12,9 +12,9 @@ Tres usuarios internos. Código corto manual. Depósito previo confirmado produc
 4. Procedimiento logístico de regreso/reembolsos. El encargado confirmó liberar tras regreso físico si ya se envió o entregó.
 5. Varios juguetes por pedido, envíos/cancelaciones parciales.
 6. Costos por pieza/lote, descuentos, transporte/comisiones. Sin gastos completos solo hay ganancia bruta.
-7. Fecha del reporte y comienzo de semana; ventas distintas de cobros.
+7. Fecha del reporte y comienzo de semana; ventas distintas de cobros. Acordado 2026-11-02: venta = entregada y pagada por completo, igual en panel y reportes (ver REPORTES.md).
 8. Permisos de costos, ajustes, cancelaciones y correcciones de pagos. Propuesta implementada en `feature/usuarios-permisos` (ver [USUARIOS_Y_PERMISOS.md](USUARIOS_Y_PERMISOS.md)); pendiente de aprobación del negocio.
-9. Métodos de pago, reembolsos y sobrepagos. Corrección/anulación de abonos implementada en `feature/correcciones-pagos` conservando historial; reembolsos siguen sin regla (propuesta en [CORRECCIONES_PAGOS.md](CORRECCIONES_PAGOS.md)).
+9. Métodos de pago, reembolsos y sobrepagos. Corrección/anulación de abonos implementada en `feature/correcciones-pagos` conservando historial; reembolsos acordados e implementados el 2026-11-02: parciales o totales, solo pedidos cancelados, tras el regreso físico, solo administrador (ver [CORRECCIONES_PAGOS.md](CORRECCIONES_PAGOS.md)).
 10. GTQ y America/Guatemala propuestos a confirmar.
 
 ## Decisión validada por el encargado

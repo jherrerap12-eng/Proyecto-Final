@@ -40,14 +40,20 @@ class DashboardTest extends TestCase
         foreach ([[$entregado, '25.10', true, false], [$entregado, '20.00', false, false], [$entregado, '5.00', true, true], [$empacado, '10.00', true, false]] as [$pedido, $monto, $verificado, $anulado]) {
             Pago::create(['pedido_id' => $pedido->id, 'usuario_id' => $usuario->id, 'monto' => $monto, 'metodo' => 'efectivo', 'clave_operacion' => (string) Str::uuid(), 'fecha_pago' => now()->toDateString(), 'verificado_en' => $verificado ? now() : null, 'verificado_por' => $verificado ? $usuario->id : null, 'anulado_en' => $anulado ? now() : null]);
         }
+        // Criterio único de venta (igual que Reportes): entregada Y pagada por completo.
+        // $entregado solo tiene Q 25.10 verificados de Q 100.10: no es venta. $pagado sí lo es.
+        $pagado = $crear('80.00', 'confirmado', 'entregado');
+        $pagado->forceFill(['confirmado_en' => now()])->save();
+        $pagado->detalles()->create(['producto_id' => $pieza->id, 'codigo' => 'HIST-002', 'nombre' => $pieza->nombre, 'precio' => '80.00', 'costo' => '30.00', 'version_producto' => 1]);
+        Pago::create(['pedido_id' => $pagado->id, 'usuario_id' => $usuario->id, 'monto' => '80.00', 'metodo' => 'efectivo', 'clave_operacion' => (string) Str::uuid(), 'fecha_pago' => now()->toDateString(), 'verificado_en' => now(), 'verificado_por' => $usuario->id]);
         $disponible = Producto::create(['codigo' => 'DISP-001', 'nombre' => 'Disponible', 'costo' => '1.00', 'precio' => '2.00']);
         $disponible->forceFill(['existencias' => 1])->save();
         $this->actingAs($usuario)->get('/panel')->assertOk()
-            ->assertViewHas('resumenVentas', fn ($resumen) => $resumen->total_ventas === '100.10' && $resumen->total_ganancia === '40.05')
+            ->assertViewHas('resumenVentas', fn ($resumen) => $resumen->total_ventas === '80.00' && $resumen->total_ganancia === '50.00')
             ->assertViewHas('saldosPorCobrar', '115.00')
             ->assertViewHas('pedidosPorPreparar', 0)
             ->assertViewHas('pedidosEmpacados', 1)
-            ->assertViewHas('pedidosEntregados', 1)
+            ->assertViewHas('pedidosEntregados', 2)
             ->assertViewHas('piezasDisponibles', 1);
     }
 }

@@ -12,6 +12,30 @@
 @include('inventario.errores')
 @if ($pedido->estado === 'cancelado')
     <div class="alert alert-warning">El pedido está cancelado. No admite nuevos abonos ni verificaciones; se conserva el historial.</div>
+    <section class="card border-0 shadow-sm rounded-4 mb-4"><div class="card-body p-4">
+        <h2 class="h4">Reembolso</h2>
+        <p class="small text-secondary">Verificado sin devolver: <strong>Q {{ \App\Soporte\Importe::decimal($porReembolsar) }}</strong>. Se puede devolver todo o una parte, en uno o varios registros. El reembolso se guarda aparte: los abonos no se modifican.</p>
+        @if ($porReembolsar === 0)
+            <p class="mb-0 text-secondary">No queda importe verificado por devolver.</p>
+        @elseif ($esperaRegreso)
+            <div class="alert alert-info mb-0">Las piezas enviadas aún no regresan. Confirma su regreso físico en la <a href="{{ route('pedidos.mostrar', $pedido) }}">ficha del pedido</a> antes de reembolsar.</div>
+        @elseif (auth()->user()->cannot('registrar-reembolsos'))
+            <p class="mb-0 text-secondary">Solo un administrador puede registrar reembolsos.</p>
+        @else
+        <form method="POST" action="{{ route('pagos.reembolsar', $pedido->id) }}" data-envio-unico>
+            @csrf
+            <input type="hidden" name="clave_operacion" value="{{ old('clave_operacion', $clave) }}">
+            <div class="row g-3">
+                <div class="col-md-4"><label for="reembolso-importe" class="form-label">Importe a devolver (Q)</label><input id="reembolso-importe" name="importe" type="number" min="0.01" max="{{ \App\Soporte\Importe::decimal($porReembolsar) }}" step="0.01" required value="{{ old('importe', \App\Soporte\Importe::decimal($porReembolsar)) }}" class="form-control"></div>
+                <div class="col-md-4"><label for="reembolso-fecha" class="form-label">Fecha de la devolución</label><input id="reembolso-fecha" name="fecha" type="date" required max="{{ now()->toDateString() }}" value="{{ old('fecha', now()->toDateString()) }}" class="form-control"></div>
+                <div class="col-md-4"><label for="reembolso-metodo" class="form-label">Método</label><select id="reembolso-metodo" name="metodo" required class="form-select"><option value="">Selecciona un método</option>@foreach(['efectivo' => 'Efectivo', 'transferencia' => 'Transferencia', 'deposito' => 'Depósito'] as $valor => $etiqueta)<option value="{{ $valor }}" @selected(old('metodo') === $valor)>{{ $etiqueta }}</option>@endforeach</select></div>
+                <div class="col-md-6"><label for="reembolso-referencia" class="form-label">Referencia del comprobante</label><input id="reembolso-referencia" name="referencia" maxlength="100" value="{{ old('referencia') }}" class="form-control"><div class="form-text">Obligatoria para transferencia o depósito.</div></div>
+                <div class="col-md-6"><label for="reembolso-motivo" class="form-label">Motivo</label><input id="reembolso-motivo" name="motivo" required minlength="5" maxlength="300" value="{{ old('motivo') }}" class="form-control" placeholder="Ej.: cliente desistió; se retiene Q 10 de envío"></div>
+            </div>
+            <button class="btn btn-outline-danger mt-3" type="submit">Registrar reembolso</button>
+        </form>
+        @endif
+    </div></section>
 @elseif ($pedido->estado === 'borrador' && $pedido->modalidad !== 'deposito')
     <div class="alert alert-info">Confirma el pedido contra entrega antes de registrar abonos.</div>
 @elseif ($resumen['saldo'] === 0)
@@ -73,7 +97,7 @@
                             </form>
                         </details>
                         @else
-                        <span class="small text-secondary">Requiere regla de reembolso</span>
+                        <span class="small text-secondary">Se devuelve con un reembolso</span>
                         @endif
                     @elseif ($pago->correccion)
                         <span class="small text-secondary">Reemplazado por #{{ $pago->correccion->id }}</span>
@@ -86,4 +110,15 @@
         </tbody></table></div>
     @if ($pagos->hasPages())<div class="card-body">{{ $pagos->links('pagination::bootstrap-5') }}</div>@endif
 </section>
+@if ($reembolsos->isNotEmpty())
+<section class="card border-0 shadow-sm rounded-4 mt-4">
+    <div class="card-body"><h2 class="h4 mb-0">Historial de reembolsos</h2></div>
+    <div class="table-responsive"><table class="table align-middle mb-0">
+        <thead class="table-light"><tr><th scope="col">Fecha</th><th scope="col">Importe</th><th scope="col">Método / referencia</th><th scope="col">Responsable</th><th scope="col">Motivo</th></tr></thead><tbody>
+        @foreach ($reembolsos as $reembolso)
+            <tr><td class="text-nowrap">{{ $reembolso->fecha_reembolso->format('d/m/Y') }}</td><td class="text-nowrap">Q {{ $reembolso->monto }}</td><td>{{ ['efectivo' => 'Efectivo', 'transferencia' => 'Transferencia', 'deposito' => 'Depósito'][$reembolso->metodo] ?? $reembolso->metodo }}<div class="small">{{ $reembolso->referencia ?? 'Sin referencia' }}</div></td><td>{{ $reembolso->usuario->name }}</td><td class="text-break">{{ $reembolso->motivo }}</td></tr>
+        @endforeach
+        </tbody></table></div>
+</section>
+@endif
 @endsection

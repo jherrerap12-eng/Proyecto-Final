@@ -5,8 +5,10 @@ namespace App\Http\Controllers;
 use App\Acciones\Pagos\ConsultarPedidos;
 use App\Acciones\Pagos\CorregirPago;
 use App\Acciones\Pagos\RegistrarPago;
+use App\Acciones\Pagos\RegistrarReembolso;
 use App\Http\Requests\SolicitudCorreccionPago;
 use App\Http\Requests\SolicitudPago;
+use App\Http\Requests\SolicitudReembolso;
 use App\Models\Pago;
 use App\Models\Pedido;
 use App\Soporte\Importes;
@@ -39,8 +41,11 @@ class ControladorPagos extends Controller
         $resumen = $fuente->resumen($pedido);
         $pagos = $pedido->pagos()->with(['usuario', 'verificador', 'anulador', 'correccion'])->orderByDesc('fecha_pago')->orderByDesc('id')->paginate(15);
         $clave = (string) Str::uuid();
+        $reembolsos = $pedido->reembolsos()->with('usuario')->orderByDesc('fecha_reembolso')->orderByDesc('id')->get();
+        $porReembolsar = app(RegistrarReembolso::class)->disponibleCentavos($pedido);
+        $esperaRegreso = $pedido->reservas()->where('estado', 'devolucion_pendiente')->exists();
 
-        return view('pagos.detalle', compact('pedido', 'pagos', 'resumen', 'clave'));
+        return view('pagos.detalle', compact('pedido', 'pagos', 'resumen', 'clave', 'reembolsos', 'porReembolsar', 'esperaRegreso'));
     }
 
     public function store(SolicitudPago $solicitud, int $pedido, RegistrarPago $accion)
@@ -88,5 +93,12 @@ class ControladorPagos extends Controller
         $accion->anular($pago, $datos['motivo'], $solicitud->user());
 
         return redirect()->route('pagos.show', $pago->pedido_id)->with('estado', 'Abono #'.$pago->id.' anulado. Se conserva en el historial.');
+    }
+
+    public function reembolsar(SolicitudReembolso $solicitud, int $pedido, RegistrarReembolso $accion)
+    {
+        $reembolso = $accion->registrar($pedido, $solicitud->validated(), $solicitud->user());
+
+        return redirect()->route('pagos.show', $pedido)->with('estado', 'Reembolso #'.$reembolso->id.' de Q '.$reembolso->monto.' registrado.');
     }
 }

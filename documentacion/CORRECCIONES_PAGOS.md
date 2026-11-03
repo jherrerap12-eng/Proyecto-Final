@@ -37,13 +37,19 @@ La comprobación se hace dentro de la transacción, con el pedido y todos sus pa
 
 `corregir-pagos`: administrador y supervisor (propuesta en `USUARIOS_Y_PERMISOS.md`). El operador recibe 403 y no ve los controles.
 
-## Reembolsos — no implementados, propuesta para acordar
+## Reembolsos — implementados (regla acordada el 2026-11-02)
 
-La guía pide acordar la regla antes de implementar. Propuesta para llevar al negocio:
+`POST /pagos/pedidos/{pedido}/reembolsos`, formulario en la ficha de pagos de un pedido cancelado.
 
-- Solo en pedidos cancelados, solo sobre importe verificado, por administrador.
-- Registro separado de tipo «reembolso» (no un abono negativo ni una anulación), con método, referencia del comprobante de devolución, fecha, responsable y motivo.
-- ¿Se devuelve el depósito completo o se retiene un porcentaje si el cliente desiste? ¿Qué pasa si el pedido ya se envió y no regresó? Definir antes de programar.
+- Solo pedidos **cancelados** y solo dinero **verificado**: el máximo es lo verificado vigente menos lo ya reembolsado. Los abonos pendientes no cuentan.
+- Puede ser **parcial o total**, en uno o varios registros (por ejemplo, retener el costo de envío si el cliente desiste).
+- Si el pedido se envió, primero debe confirmarse el **regreso físico** de las piezas en la ficha del pedido.
+- Solo el **administrador** (permiso `registrar-reembolsos`).
+- Se guarda en la tabla propia `reembolsos` (monto, método, referencia, fecha, motivo, responsable, `clave_operacion`). Nunca es un abono negativo ni una anulación: los abonos originales no cambian.
+- Evento `reembolso_registrado` en el historial del pedido; idempotente por `clave_operacion`; transacción con bloqueo pedido → pagos → reembolsos.
+- En reportes se restan de los cobros por su fecha: **cobro neto = cobros verificados − reembolsos**.
+
+Migración: `2026_11_03_000300_crear_tabla_reembolsos`. Pruebas: `tests/Feature/ReembolsosTest.php`.
 
 ## Migración
 

@@ -42,7 +42,7 @@
     <div class="table-responsive"><table class="table table-sm mb-0">
         <thead><tr><th scope="col">Operación</th>@foreach (\App\Soporte\Permisos::ROLES as $etiqueta)<th scope="col" class="text-center">{{ $etiqueta }}</th>@endforeach</tr></thead>
         <tbody>
-        @foreach (['administrar-usuarios' => 'Administrar usuarios', 'verificar-pagos' => 'Verificar pagos', 'corregir-pagos' => 'Corregir o anular abonos', 'ajustar-inventario' => 'Ajustar inventario', 'cancelar-pedidos' => 'Cancelar pedidos'] as $permiso => $nombre)
+        @foreach (['administrar-usuarios' => 'Administrar usuarios', 'verificar-pagos' => 'Verificar pagos', 'corregir-pagos' => 'Corregir o anular abonos', 'registrar-reembolsos' => 'Registrar reembolsos', 'ajustar-inventario' => 'Ajustar inventario', 'cancelar-pedidos' => 'Cancelar pedidos'] as $permiso => $nombre)
             <tr><th scope="row" class="fw-normal">{{ $nombre }}</th>@foreach (array_keys(\App\Soporte\Permisos::ROLES) as $rol)<td class="text-center">{!! \App\Soporte\Permisos::permite($rol, $permiso) ? '<span aria-label="Sí">✔</span>' : '<span class="text-secondary" aria-label="No">—</span>' !!}</td>@endforeach</tr>
         @endforeach
         </tbody>
