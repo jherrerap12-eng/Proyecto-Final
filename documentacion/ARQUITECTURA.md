@@ -1,5 +1,7 @@
 # Arquitectura y DER conceptual
 
+> Cierre, 2026-11-03: las secciones inferiores registran la evolución del diseño. El esquema implementado está en [DER_FINAL.md](DER_FINAL.md). Roles, correcciones/reembolsos y entregas están integrados; aplicación publicada en Render con MySQL Aiven. En producción sesiones/caché usan base de datos y cola síncrona. Ver [DESPLIEGUE_RENDER.md](DESPLIEGUE_RENDER.md).
+
 Monolito Laravel MVC + Blade + Bootstrap 5 + JavaScript/Fetch + MySQL. Laravel 12 por PHP 8.2; revisar actualización/soporte futuro. Vite construye recursos; archivos lock compartidos. Sesiones/cache en archivos y cola síncrona para un servidor inicial. Sin React/Vue, API pública o WebSockets.
 
 Flujo: navegador → rutas/middleware → controlador/validación → acción de negocio → Eloquent/MySQL → Blade/JSON. Controladores breves, Form Requests en módulos, acciones futuras en `app/Acciones/`, Policies cuando se acuerden permisos. Archivos propios en español, convenciones Laravel preservadas.

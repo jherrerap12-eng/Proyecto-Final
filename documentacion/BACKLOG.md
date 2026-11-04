@@ -1,27 +1,31 @@
-# Backlog y plan comprimido
+﻿# Backlog y estado de cierre
 
-Plazo: tres días. Los seis sprints se conservan como bloques previstos, no seis semanas ejecutadas. Dos integrantes activos inicialmente; la guía exige cinco, por resolver con el equipo/docente. No inventar historial.
+Actualizado: 2026-11-03. Los bloques siguientes resumen entregas técnicas; no constituyen evidencia de seis sprints semanales ejecutados.
 
-| Sprint | Prioridad | Entrega | Responsable | Estado |
-|---|---|---|---|---|
-| 1 | P0 | Requisitos, PRD, reglas/DER, Laravel, acceso, plantilla, Git compartido | Encargado; revisión conjunta | En progreso |
-| 2 | P0 | Inventario, costos/precios, clientes, formularios/búsquedas/pruebas | Encargado: inventario; compañero: clientes | Integrados en main mediante PR #1 y #2; 25 pruebas aprobadas |
-| 3 | P0 | Pedidos, reservas y concurrencia | Encargado | Implementado/probado en feature/pedidos; revisión manual y PR pendientes |
-| 4 | P0 | Pagos, cancelaciones y logística | Compañero: pagos; logística por asignar | Contrato/base de pagos preparados; formularios/operaciones pendientes; cancelación implementada en pedidos |
-| 5 | P1 | Reportes, filtros, paginación y Fetch | Compañero: reportes | Reportes y CSV implementados en feature/reportes; pruebas y revisión documentadas en REPORTES.md. Fetch útil queda pendiente en el alcance general |
-| 3 | P0 | Pedidos, reservas y concurrencia | Encargado | Integrados en main mediante PR #3 junto con pagos |
-| 4 | P0 | Pagos, cancelaciones y logística | Compañero: pagos; encargado: entregas | Pagos integrados; entregas implementado y probado en feature/entregas (66 pruebas), pendiente revisión/PR |
-| 5 | P1 | Reportes, filtros, paginación y Fetch | Por asignar | Pendiente |
-| 6 | P0 | Pruebas, correcciones, documentación, despliegue y defensa | Ambos; demás por definir | Pendiente |
+| Bloque previsto | Entrega | Estado |
+|---|---|---|
+| 1 | Requisitos iniciales, Laravel, acceso y repositorio | Implementación integrada; aceptación formal/plantilla del curso por adjuntar |
+| 2 | Inventario y clientes | Integrados mediante PR 1 y 2 |
+| 3 | Pedidos, reservas e integridad | Integrados mediante PR 3 junto con pagos |
+| 4 | Pagos, cancelaciones y entregas | Integrados mediante PR 3 y 4; ampliados con correcciones/reembolsos |
+| 5 | Dashboard, reportes, filtros y Fetch | Integrados mediante PR 5/6/7 y cambios posteriores |
+| 6 | Roles, cierre financiero, pruebas y despliegue | PR 8/9/10 integrados; Render/Aiven funcional según encargado; documentación final preparada |
 
-Previsión: día 1 base/Sprint 2; día 2 pedidos/pagos/logística; día 3 reportes/integración/despliegue. Alta presión, no garantía; recortar extras, no integridad. Probar en cada bloque.
+La numeración identifica PR del repositorio, no fechas ni responsables ficticios. Consultar historial Git para autoría real. Los nuevos archivos documentales se encuentran locales hasta su commit/publicación autorizados.
 
-## Sprint Backlog actual
+## Pendientes de cierre
 
-Encargado: entorno/Git, base/acceso, configurar MySQL, publicar tras autorización. Ambos+negocio: validar PRD/dudas. Compañero: reproducir instalación desde clonación. Evidencia: resultados técnicos, decisiones y enlaces auténticos.
+| Prioridad | Tarea | Criterio de terminado | Responsable |
+|---|---|---|---|
+| Alta | Aceptación del negocio | PRD, permisos y reglas aprobados con fecha/persona | Equipo y representante del negocio, por consignar |
+| Alta | Evidencia de revisión publicada | Casos por rol/dispositivo, resultado y capturas sanitizadas | Equipo, por consignar |
+| Alta | Respaldo/restauración | Registro verificable en base destino separada; responsable/frecuencia definidos | Responsable técnico, por consignar |
+| Alta | Expediente académico | Integrantes, contribuciones, tablero y evidencias según guía | Equipo, por consignar |
+| Media | Rendimiento | Volumen acordado, medición y corrección si no cumple | Desarrollo, por consignar |
+| Media | Presentación | Diapositivas y ensayo con recorrido reproducible | Equipo, por consignar |
 
-## GitHub Projects
+## Gestión y alcance
 
-Columnas: Product Backlog → Sprint Backlog → En progreso → Revisión/Testing → Finalizado.
+Usar el tablero real: Backlog → Sprint Backlog → En progreso → Revisión/Testing → Finalizado. Cada historia debe enlazar aceptación, responsable, PR y evidencia auténtica. No reconstruir retrospectivamente ceremonias que no ocurrieron.
 
-Cada Issue: ID, historia, aceptación, responsable real, prioridad, sprint, PR y evidencia. PO valida prioridades con negocio; SM e integrantes por asignar. Ambos roles pueden desarrollar. Planificación por bloque, seguimiento de bloqueos, demostración y retrospectiva. Cerrar solo tras verificación.
+La revisión manual y el funcionamiento publicado fueron confirmados por el encargado. Los pendientes documentales no significan que los módulos sigan sin desarrollar. No añadir funciones fuera de alcance únicamente para llenar el backlog.

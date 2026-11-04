@@ -1,100 +1,69 @@
-# Babybu Toys
+﻿# Babybu Toys
 
-Aplicación administrativa interna de juguetes vendidos mediante lives y WhatsApp. Proyecto de Desarrollo Web, Universidad Mariano Gálvez de Guatemala.
+Sistema administrativo interno para juguetes vendidos mediante lives y WhatsApp. Proyecto de Desarrollo Web, Universidad Mariano Gálvez de Guatemala.
 
-## Estado real
+**Aplicación publicada:** https://babybu-toys.onrender.com
 
-En `feature/reportes` se implementan reportes de ventas pagadas, costo/ganancia bruta y cobros, con agrupación diaria/semanal/mensual y CSV. Ver [reglas y verificación de reportes](documentacion/REPORTES.md). La rama parte de main con pedidos y pagos integrados.
+## Estado actual
 
-Laravel 12 con autenticación, inventario por pieza, clientes y pedidos/pagos integrados en main (`42fcffb`). Incluye pedidos/reservas, registro/verificación de pagos, mínimo 25 %, cancelación/regreso físico, saldos, búsquedas e historial. Sin cuentas predeterminadas ni registro público. Ver [CHECKLIST.md](CHECKLIST.md), [clientes](documentacion/CLIENTES.md), [inventario](documentacion/INVENTARIO.md), [pedidos](documentacion/PEDIDOS_Y_RESERVAS.md) y [guía de integración](documentacion/INTEGRACION_PEDIDOS_PAGOS.md).
-Laravel 12 con autenticación, clientes, inventario, pedidos/reservas y pagos integrados en main mediante PR #3 (42fcffb). Esta rama feature/entregas añade empaque, Forza/mensajería propia, salida física de inventario, confirmación de entrega y seguimiento de regreso. Entregas está probado localmente y pendiente de revisión/commit/PR. Sin cuentas predeterminadas ni registro público. Ver [CHECKLIST.md](CHECKLIST.md), [clientes](documentacion/CLIENTES.md), [inventario](documentacion/INVENTARIO.md), [pedidos](documentacion/PEDIDOS_Y_RESERVAS.md), [pagos](documentacion/INTEGRACION_PEDIDOS_PAGOS.md) y [entregas](documentacion/ENTREGAS.md).
+Los módulos están integrados en main: autenticación, usuarios/roles, dashboard, inventario por pieza, clientes, pedidos/reservas, pagos/verificación/correcciones, reembolsos, entregas y reportes con CSV. Frontend Blade/Bootstrap con búsqueda Fetch en pedidos. No existe registro público ni cuentas predeterminadas.
 
-## Herramientas
+El encargado confirmó el funcionamiento publicado y la revisión manual. Las últimas verificaciones registradas son 139 pruebas/1231 aserciones, reportes en MariaDB y 15 escenarios concurrentes financieros aprobados. Ver [entrega final](documentacion/ENTREGA_FINAL.md) para procedencia, evidencias y datos pendientes de completar.
 
-PHP 8.2 compatible con Laravel 12, Composer 2, Node.js 22/24 y npm, Git, MySQL 8 recomendado. Extensiones PHP: PDO MySQL, mbstring, openssl, tokenizer, XML, ctype, fileinfo, curl y zip. SQLite (`pdo_sqlite`) únicamente para pruebas aisladas.
+## Arquitectura y reglas
 
-XAMPP local incluye MariaDB 10.4, no MySQL; conexión real pendiente. Laravel 12 se eligió por PHP 8.2 disponible. Revisar actualización de PHP/Laravel y soporte antes de operación prolongada.
+Laravel 12, PHP 8.2, Blade, Bootstrap 5, JavaScript y Vite. MariaDB de XAMPP en desarrollo; MySQL de Aiven en despliegue. Render ejecuta PHP/Apache mediante Docker y almacena sesiones y caché en la base.
 
-## Instalación después de clonar
+Cada código identifica una pieza física con existencia 0/1. Reservar bloquea disponibilidad; enviar registra salida física. La reserva firme requiere 25 % verificado, redondeado al centavo superior. Cancelar después del envío mantiene el bloqueo hasta el regreso físico. Venta reconocida: pedido confirmado, entregado y completamente pagado. Ganancia bruta y cobros se distinguen; cobro neto descuenta reembolsos.
 
-Abrir la raíz en VS Code y ejecutar los comandos por separado en PowerShell.
+## Instalación local
+
+Requisitos: PHP 8.2 con PDO MySQL, mbstring, OpenSSL, XML/DOM, fileinfo, ctype y zip; Composer 2, Node 22/24, npm y MySQL/MariaDB. Las pruebas requieren PDO SQLite. Ejecutar desde la raíz:
 
 ```powershell
 composer install
-```
-
-Instala dependencias PHP exactas de `composer.lock` en `vendor/`. No modifica la base.
-
-```powershell
 Copy-Item .env.example .env
-```
-
-Crea configuración privada. Ejecutar solo si `.env` no existe; nunca sobrescribir configuración existente sin revisarla. Completar usuario y contraseña locales; no publicar este archivo.
-
-```powershell
 php artisan key:generate
-```
-
-Genera la clave privada en `.env`. No regenerarla si hay información cifrada en uso.
-
-Crear base vacía `babybu_toys` con cotejamiento `utf8mb4_unicode_ci` desde el administrador MySQL y usuario con permisos únicamente sobre ella. Completar `DB_USERNAME` y `DB_PASSWORD` localmente; no guardar contraseñas en código, capturas o argumentos.
-
-```powershell
-php artisan migrate
-```
-
-Crea tablas pendientes en la base configurada. Revisar `DB_DATABASE` antes: modifica esa base. No usar `migrate:fresh` sobre datos que deban conservarse.
-
-```powershell
-php artisan usuario:crear
-```
-
-Solicita nombre, correo y contraseña oculta; guarda hash de contraseña. Repetir por cada usuario autorizado; no hay credenciales universales.
-
-```powershell
 npm ci
-```
-
-Instala dependencias frontend exactas de `package-lock.json` en `node_modules/`.
-
-```powershell
 npm run build
 ```
 
-Compila Bootstrap/CSS/JavaScript en `public/build/`; debe finalizar sin errores.
+Copiar `.env.example` solo en una instalación nueva. Crear una base vacía y un usuario dedicado; completar DB_HOST, DB_PORT, DB_DATABASE, DB_USERNAME y DB_PASSWORD en el `.env` privado. Después:
 
 ```powershell
+php artisan migrate
+php artisan usuario:crear
 php artisan serve
 ```
 
-Inicia servidor local; abrir `http://127.0.0.1:8000/ingresar`. Verificar ingreso, panel y salida. Detener con Ctrl+C. No es servidor de producción. Para recarga de estilos usar `npm run dev` en otra terminal.
+Abrir http://127.0.0.1:8000. La primera cuenta creada será administradora; las contraseñas se introducen de forma oculta. En Windows, si PowerShell bloquea npm.ps1, usar `npm.cmd`.
+
+Al actualizar una copia existente: instalar dependencias de los lockfiles si cambiaron, ejecutar `php artisan migrate` y recompilar recursos. No sobrescribir su `.env`, regenerar APP_KEY sin motivo ni ejecutar migrate:fresh sobre datos que deban conservarse.
 
 ## Verificación
 
 ```powershell
-php artisan test
-```
-
-Ejecuta pruebas en SQLite en memoria, sin usar MySQL de `.env`. Incluye acceso protegido, autenticación, cierre, validación y límite de intentos. No demuestra concurrencia de inventario ni compatibilidad real MySQL.
-
-```powershell
+php vendor/phpunit/phpunit/phpunit --no-progress
 php artisan route:list
+php tests/Integracion/verificar_reportes.php
+php tests/Integracion/verificar_concurrencia_financiera.php
 ```
 
-Comprobar rutas `/ingresar`, `/panel`, `/salir`. `php artisan list` debe incluir `usuario:crear`.
+PHPUnit usa SQLite en memoria según phpunit.xml. Los scripts de integración requieren entorno local y MySQL/MariaDB, crean tablas temporales o clones aislados y no deben ejecutarse contra la base publicada. Existen verificaciones adicionales de concurrencia para inventario, pedidos, pagos y entregas en tests/Integracion. No confundir pruebas MariaDB con certificación completa para todas las versiones MySQL.
 
-```powershell
-vendor\bin\pint --test
-```
+## Despliegue y operación
 
-Comprueba formato PHP sin modificar archivos. `vendor\bin\pint` aplica formato; revisar después los cambios.
+[Render + Aiven](documentacion/DESPLIEGUE_RENDER.md). Configurar secretos en Render, certificado CA, APP_URL HTTPS, APP_DEBUG=false, sesiones de base y clave estable. El arranque aplica migraciones pendientes. Render Free puede dormir y su disco es efímero; archivos de negocio persistentes requieren almacenamiento externo si se incorporan posteriormente.
 
-## Documentación
+No subir `.env`, claves, credenciales ni volcados. [Respaldo y recuperación](documentacion/OPERACION_Y_RESPALDO.md). Los datos de XAMPP no se copian automáticamente a Aiven.
 
-[Pagos: preparación y contrato de integración con pedidos](documentacion/PAGOS.md). La pantalla está disponible; el registro de abonos requiere integrar pedidos y su clave foránea.
+## Documentación de entrega
 
-[Colaboración](CONTRIBUTING.md), [PRD](documentacion/PRD.md), [Reglas](documentacion/REGLAS_NEGOCIO.md), [Arquitectura y DER](documentacion/ARQUITECTURA.md), [Backlog](documentacion/BACKLOG.md), [GitHub](documentacion/GITHUB.md), [Verificación](documentacion/VERIFICACION.md).
+- [Manual de usuario](documentacion/MANUAL_USUARIO.md)
+- [DER final](documentacion/DER_FINAL.md) y [arquitectura](documentacion/ARQUITECTURA.md)
+- [PRD](documentacion/PRD.md) y [reglas](documentacion/REGLAS_NEGOCIO.md)
+- [Entrega, evidencias y defensa](documentacion/ENTREGA_FINAL.md)
+- [Checklist](CHECKLIST.md), [backlog](documentacion/BACKLOG.md) y [verificación histórica](documentacion/VERIFICACION.md)
+- [Colaboración](CONTRIBUTING.md) y [usuarios/permisos](documentacion/USUARIOS_Y_PERMISOS.md)
 
-## Producción pendiente
-
-Falta alojamiento, conexión MySQL real, HTTPS, respaldos y restauración. Raíz pública `public/`; `APP_ENV=production`, `APP_DEBUG=false`, URL real y `SESSION_SECURE_COOKIE=true`. Compilar recursos y verificar permisos de `storage/` y `bootstrap/cache/`. No publicar secretos, volcados, `vendor/` ni `node_modules/`.
+Los registros históricos conservan el contexto de cada entrega. Para el estado de cierre consultar el checklist actual. La validación formal del negocio, los nombres del equipo, el tablero y las evidencias deben completarse con información auténtica.

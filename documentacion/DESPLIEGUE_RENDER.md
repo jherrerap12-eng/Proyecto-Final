@@ -1,5 +1,7 @@
 # Render gratuito y Aiven MySQL
 
+Estado 2026-11-03: el encargado confirmó funcionamiento en https://babybu-toys.onrender.com. Se corrigió la consulta de migración para ONLY_FULL_GROUP_BY y el acceso al CA desde Apache. MYSQL_ATTR_SSL_CA conserva `/etc/secrets/ca.pem`; iniciar.sh crea una copia pública legible por www-data antes de cachear la configuración, manteniendo validación SSL.
+
 El Dockerfile compila recursos con Node e instala PHP/Apache y dependencias de producción. El inicio aplica migraciones pendientes sin borrar datos. Usar una base dedicada a Babybu Toys. Los datos locales no se transfieren automáticamente.
 
 ## Configuración
@@ -48,4 +50,4 @@ Comprobar inicio/cierre de sesión, permisos de los tres roles, inventario, pedi
 
 El almacenamiento local de Render es efímero: no guardar allí datos o archivos de negocio que deban persistir. El servicio gratuito puede dormir por inactividad. Programar respaldos privados de MySQL y comprobar restauración en otra base antes de utilizar datos reales.
 
-La construcción Docker y conexión a Aiven requieren verificación en el despliegue: no hay Docker instalado en el equipo local.
+La imagen se construyó y desplegó en Render según el registro compartido por el encargado; no se construyó localmente porque no hay Docker instalado. Cada nueva versión debe validarse con sus logs y pruebas. Ver OPERACION_Y_RESPALDO.md y ENTREGA_FINAL.md.
