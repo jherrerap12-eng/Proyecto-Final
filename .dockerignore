@@ -15,4 +15,5 @@ public/hot
 *.sql
 *.sqlite*
 *.pem
+storage/certificados
 auth.json
