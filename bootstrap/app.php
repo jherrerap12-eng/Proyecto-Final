@@ -13,6 +13,10 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware) {
+        // Render termina HTTPS en su proxy; Laravel debe reconocer ese protocolo.
+        if (env('RENDER') === true || env('RENDER') === 'true') {
+            $middleware->trustProxies(at: '*');
+        }
         $middleware->redirectGuestsTo(fn () => route('login'));
         $middleware->redirectUsersTo(fn () => route('panel'));
         // Cierra sesiones de cuentas desactivadas o cuya contraseña cambió en otro dispositivo.
