@@ -10,31 +10,41 @@
 </div>
 
 <!-- 2. TUS BOTONES Y ACCESOS ORIGINALES -->
-<div class="card border-0 shadow-sm rounded-4 mb-4">
-    <div class="card-body p-4 p-lg-5">
+<div class="accesos-panel mb-4">
+    <section class="acceso-panel">
         <h2 class="h4">Gestión de clientes</h2>
         <p class="text-secondary">Registra compradores y consulta sus datos de contacto.</p>
-        <a class="btn btn-primary" href="{{ route('clientes.index') }}">Ir a clientes</a>
+        <a class="btn btn-primary" href="{{ route('clientes.index') }}">Abrir clientes</a>
+    </section>
+    <section class="acceso-panel">
         
-        <h2 class="h4 mt-4">Inventario</h2>
+        <h2 class="h4">Inventario</h2>
         <p class="text-secondary">Registra piezas individuales y consulta su disponibilidad y movimientos.</p>
         <a href="{{ route('inventario.listar') }}" class="btn btn-primary">Abrir inventario</a>
+    </section>
+    <section class="acceso-panel">
         
-        <h2 class="h4 mt-4">Pedidos y reservas</h2>
+        <h2 class="h4">Pedidos y reservas</h2>
         <p class="text-secondary">Selecciona un cliente, reúne sus juguetes y confirma la reserva.</p>
         <a href="{{ route('pedidos.listar') }}" class="btn btn-primary">Abrir pedidos</a>
+    </section>
+    <section class="acceso-panel">
         
-        <h2 class="h4 mt-4">Pagos y saldos</h2>
+        <h2 class="h4">Pagos y saldos</h2>
         <p class="text-secondary">Registra abonos, verifica los recibidos y consulta el saldo de cada pedido.</p>
         <a href="{{ route('pagos.index') }}" class="btn btn-primary">Abrir pagos</a>
-        <h2 class="h4 mt-4">Reportes del negocio</h2>
+    </section>
+    <section class="acceso-panel">
+        <h2 class="h4">Reportes del negocio</h2>
         <p class="text-secondary">Consulta ventas pagadas, ganancia bruta y cobros por período.</p>
         <a href="{{ route('reportes.index') }}" class="btn btn-primary">Abrir reportes</a>
+    </section>
+    <section class="acceso-panel">
         
-        <h2 class="h4 mt-4">Entregas</h2>
+        <h2 class="h4">Entregas</h2>
         <p class="text-secondary">Empaca pedidos, registra envíos y confirma su entrega física.</p>
         <a href="{{ route('entregas.listar') }}" class="btn btn-primary">Abrir entregas</a>
-    </div>
+    </section>
 </div>
 
 <!-- ========================================== -->

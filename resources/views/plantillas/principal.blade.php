@@ -17,7 +17,7 @@
                 <a class="btn btn-sm {{ request()->routeIs('entregas.*') ? 'btn-primary' : 'btn-outline-primary' }}" href="{{ route('entregas.listar') }}">Entregas</a>
                 <a class="btn btn-sm {{ request()->routeIs('pagos.*') ? 'btn-primary' : 'btn-outline-primary' }}" href="{{ route('pagos.index') }}">Pagos</a>
                 <a class="btn btn-sm {{ request()->routeIs('pedidos.*') ? 'btn-primary' : 'btn-outline-primary' }}" href="{{ route('pedidos.listar') }}">Pedidos</a>
-                <a class="nav-link {{ request()->routeIs('clientes.*') ? 'fw-bold text-primary' : '' }}" href="{{ route('clientes.index') }}" @if(request()->routeIs('clientes.*')) aria-current="page" @endif>Clientes</a>
+                <a class="btn btn-sm {{ request()->routeIs('clientes.*') ? 'btn-primary' : 'btn-outline-primary' }}" href="{{ route('clientes.index') }}" @if(request()->routeIs('clientes.*')) aria-current="page" @endif>Clientes</a>
                 <a class="btn btn-sm {{ request()->routeIs('inventario.*') ? 'btn-primary' : 'btn-outline-primary' }}" href="{{ route('inventario.listar') }}">Inventario</a>
                 @can('administrar-usuarios')
                 <a class="btn btn-sm {{ request()->routeIs('usuarios.*') ? 'btn-primary' : 'btn-outline-primary' }}" href="{{ route('usuarios.index') }}">Usuarios</a>
