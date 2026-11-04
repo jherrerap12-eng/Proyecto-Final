@@ -43,7 +43,7 @@ Actualizado: 2026-11-01. Código escrito no equivale a validación del negocio n
 - [x] Reportes diarios/semanales/mensuales con ventas pagadas/cobros/ganancia bruta diferenciados, filtros, paginación y CSV implementados en `feature/reportes`. Revisión manual, PR y aprobación pendientes; ver `documentacion/REPORTES.md`.
 - [x] Logística de paquete completo implementada/probada en feature/entregas. Publicación/PR pendientes.
 - [ ] Correcciones/anulaciones de pagos, reembolsos y permisos según reglas por acordar.
-  - Correcciones y anulaciones con historial y protección del mínimo de reserva firme implementadas y probadas en `feature/correcciones-pagos` (Persona 4). Reembolsos parciales/totales implementados en `feature/reembolsos-ventas`. Pendientes: PR y prueba concurrente MySQL/MariaDB. Ver `documentacion/CORRECCIONES_PAGOS.md`.
+  - Correcciones y anulaciones con historial y protección del mínimo de reserva firme implementadas y probadas en `feature/correcciones-pagos` (Persona 4). Reembolsos parciales/totales implementados en `feature/reembolsos-ventas`. Concurrencia financiera verificada en MariaDB local en `fix/verificacion-financiera`; lectura actual de reservas corregida. Pendientes: revisión/PR de esta corrección y ejecución en MySQL 8. Ver `documentacion/CORRECCIONES_PAGOS.md`.
 - [ ] Reportes diarios/semanales/mensuales con ventas/cobros/ganancia diferenciados.
 - [ ] Filtros, paginación y Fetch útil.
 - [ ] Seguridad y pruebas integrales; DER final.
@@ -61,4 +61,11 @@ API REST independiente y CI/CD no son obligaciones universales de la guía. Trab
 - [x] Criterio único de venta: entregada y pagada, compartido por panel y reportes; cobro neto descuenta reembolsos.
 - [x] Pruebas finales de integración por rol (`tests/Feature/FlujoCompletoTest.php`): recorridos completos con rechazos, cancelación tras envío, regreso físico, reembolso, corrección y desactivación de cuenta.
 - [ ] PR revisado por otro integrante y prueba manual en navegador.
+
+## Revisión — 2026-11-03
+
+- [x] Verificación de reportes actualizada para entregas y reembolsos; aprobada en MariaDB local sin datos de prueba en tablas reales.
+- [x] Quince escenarios financieros concurrentes con conexiones independientes y contención demostrada en MariaDB; correcciones, anulaciones, reembolsos y reenvíos sin duplicados ni sobredevolución.
+- [x] Lecturas de reservas protegidas contra snapshots antiguos tras verificación/cancelación concurrente; suite funcional aprobada.
+- [ ] Revisar e integrar `fix/verificacion-financiera` mediante PR.
 
