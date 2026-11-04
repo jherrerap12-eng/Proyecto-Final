@@ -66,9 +66,9 @@ C:\xampp\php\php.exe tests/Integracion/verificar_reportes.php
 
 Las pruebas funcionales cubren sesión, fechas inválidas/invertidas y parámetros de tipo incorrecto, mes predeterminado, períodos vacíos, abonos parciales/completos, pagos pendientes/anulados/sin verificador, borradores/cancelados/gratuitos, fecha de confirmación, cobros y ventas en meses distintos, fronteras inclusivas, semanas/meses recortados, históricos, pérdidas, grandes acumulados, paginación y CSV completos, BOM y protección de fórmulas.
 
-La prueba explícita MariaDB/MySQL usa tres tablas `TEMPORARY` privadas de su conexión para contrastar consultas, agrupaciones, paginación y CSV con escenarios controlados. No inserta ni modifica registros del negocio. Las tablas desaparecen al cerrar esa conexión. Requiere entorno `local`, conexión `mysql`, permiso para tablas temporales y sin prefijo.
+La prueba explícita MariaDB/MySQL usa cinco tablas `TEMPORARY` privadas de su conexión (`pedidos`, `detalles_pedido`, `pagos`, `envios`, `reembolsos`) para contrastar consultas, agrupaciones, paginación y CSV con escenarios controlados. Incluye `estado_logistico`, entrega posterior al pago, un pedido pagado sin entregar, reembolsos en meses distintos y cobro neto negativo. También contrasta el criterio del dashboard con el de reportes. No inserta ni modifica registros del negocio. Las tablas se eliminan al finalizar, incluso cuando una comprobación falla, y desaparecen al cerrar esa conexión. Requiere entorno `local`, conexión `mysql`, permiso para tablas temporales y sin prefijo.
 
-Los resultados automatizados no acreditan aprobación del negocio, revisión móvil manual, revisión de otro integrante ni publicación. No incluye PDF, gráficos, reembolsos, cierres históricos ni reglas de permisos diferenciados.
+Los resultados automatizados no acreditan aprobación del negocio, revisión móvil manual, revisión de otro integrante ni publicación. No incluye PDF, gráficos, cierres históricos ni reglas de permisos diferenciados. El resumen y los CSV sí incluyen reembolsos y cobro neto.
 
 ### Resultado de esta entrega
 
@@ -77,3 +77,7 @@ Los resultados automatizados no acreditan aprobación del negocio, revisión mó
 - Consultas y CSV comprobados en MariaDB local: escenario controlado con Q100.30 en ventas, Q30.31 de costo, Q69.99 de ganancia bruta y Q195.30 de cobros. Los cobros incluyen cancelados/borradores y corresponden a fechas distintas de la venta.
 - Migraciones preexistentes de integración de pedidos y pagos aplicadas a la copia local sin crear migraciones para reportes.
 - Entrega en `feature/reportes` para revisión mediante Pull Request; la aprobación e integración en main corresponden a la revisión del equipo.
+
+### Actualización de verificación — 2026-11-03
+
+Tras integrar entregas y reembolsos en main, se actualizó el esquema temporal y sus resultados esperados en `fix/verificacion-financiera`. La prueba pasa en **MariaDB 10.4.32**: dos ventas entregadas y pagadas, Q100.30 en ventas, Q30.31 de costo, Q69.99 de ganancia bruta, Q235.30 en cobros, Q5.00 en reembolsos y Q230.30 de cobro neto en noviembre. El reembolso de diciembre produce Q-5.00 netos sin alterar noviembre. Las tablas temporales impiden mezclar estos escenarios con datos reales.
