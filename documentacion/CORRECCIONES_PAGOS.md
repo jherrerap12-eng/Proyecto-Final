@@ -59,4 +59,18 @@ Migración: `2026_11_03_000300_crear_tabla_reembolsos`. Pruebas: `tests/Feature/
 
 `tests/Feature/CorreccionPagosTest.php`: anulación con historial, validación y no repetición; recálculo del saldo; rechazo cuando la reserva firme queda sin mínimo y aceptación cuando otro abono lo cubre; pedido cancelado; corrección pendiente y verificada; promoción de reserva; límite del total; idempotencia; permisos operador/supervisor; abono anulado no verificable ni corregible.
 
-Pendiente: prueba concurrente en MySQL/MariaDB real (anulación simultánea con verificación o cancelación), siguiendo el patrón de `tests/Integracion/verificar_concurrencia_pagos.php`.
+### Concurrencia financiera — 2026-11-03
+
+Verificación incorporada en `tests/Integracion/verificar_concurrencia_financiera.php` para MariaDB/MySQL local:
+
+```powershell
+C:\xampp\php\php.exe tests/Integracion/verificar_concurrencia_financiera.php
+```
+
+Quince escenarios: correcciones simultáneas del mismo abono y de abonos distintos; reenvío de corrección; doble anulación; corrección/anulación en ambos órdenes; anulación/verificación en ambos órdenes; cancelación/anulación verificada; cancelación de un envío/reembolso; reembolsos que excederían el saldo; reenvío de reembolso; reembolsos parciales compatibles; reembolso/anulación y reembolso/corrección.
+
+Cada escenario usa dos procesos PHP con conexiones InnoDB independientes en `REPEATABLE READ`. Una barrera mantiene abierta la primera transacción; `FOR UPDATE NOWAIT` debe detectar su bloqueo desde la segunda conexión. Esta establece además un snapshot anterior al commit, y luego ejecuta la acción real mientras espera el pedido. Se comprueban identificadores de conexión, resultados de cada operación, importes vigentes/verificados/devueltos, conservación del original, versiones, eventos, reemplazos y reembolsos sin duplicados.
+
+La prueba detectó que una anulación podía leer una reserva temporal antigua después de una verificación concurrente y dejar una reserva firme sin el mínimo. Se corrigió `CorregirPago` para consultar las reservas con lectura bloqueante actual. La misma protección se aplica en `RegistrarReembolso` al comprobar devoluciones pendientes, para respetar una cancelación concurrente de piezas enviadas. Las regresiones están cubiertas por los escenarios verificación/anulación y cancelación enviada/reembolso.
+
+Los fixtures usan diez tablas clonadas con prefijo aleatorio `fin_…`, eliminadas al finalizar junto con los procesos y archivos de coordinación. Los clones conservan columnas/índices del esquema mediante `CREATE TABLE LIKE`; no copian claves foráneas y no sustituyen las pruebas funcionales de integridad referencial. No se escribe en tablas del negocio. Se requiere entorno `local`, conexión `mysql` sin prefijo, tablas base migradas, permiso para crear/eliminar clones y soporte `NOWAIT` (MariaDB 10.4/MySQL 8). Aprobado en MariaDB 10.4.32 local; MySQL 8 no ejecutado.

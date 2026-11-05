@@ -120,7 +120,9 @@ class CorregirPago
      */
     private function protegerReservaFirme(Pedido $pedido, int $pagadoDespues): void
     {
-        $tieneFirme = $pedido->reservas()->where('estado', 'activa')->where('tipo', 'firme')->exists();
+        // Lectura actual: bajo REPEATABLE READ una consulta normal puede seguir viendo
+        // la reserva temporal anterior a una verificación concurrente ya confirmada.
+        $tieneFirme = $pedido->reservas()->where('estado', 'activa')->where('tipo', 'firme')->lockForUpdate()->get()->isNotEmpty();
         $minimo = max(1, $pedido->depositoMinimoCentavos());
         if ($tieneFirme && $pagadoDespues < $minimo) {
             $this->error('La reserva firme quedaría con Q '.Importes::aDecimal(max(0, $pagadoDespues)).' verificados y necesita al menos Q '.Importes::aDecimal($minimo).'. Registra y verifica primero el abono correcto, o cancela el pedido.');

@@ -25,6 +25,7 @@ yarn-error.log
 .env.*
 !.env.example
 /.tmp
+/storage/certificados/
 *.sql
 *.sqlite
 *.sqlite-*

@@ -39,7 +39,9 @@ class RegistrarReembolso
                 if ($pedido->estado !== 'cancelado') {
                     $this->error('Solo se reembolsa un pedido cancelado. Cancela el pedido primero.');
                 }
-                if ($pedido->reservas()->where('estado', 'devolucion_pendiente')->exists()) {
+                // La cancelación pudo marcar la devolución mientras esperábamos el pedido.
+                // Una lectura de snapshot antigua no debe permitir devolver dinero antes del regreso.
+                if ($pedido->reservas()->where('estado', 'devolucion_pendiente')->lockForUpdate()->get()->isNotEmpty()) {
                     $this->error('Las piezas enviadas todavía no han regresado. Confirma el regreso físico en la ficha del pedido antes de reembolsar.');
                 }
 

@@ -2,7 +2,6 @@
 @section('titulo', 'Inicio')
 @section('contenido')
 @php
-    $pendientesAtencion = $pedidosPorPreparar + $pedidosEmpacados;
     $totalLogistica = $pedidosPorPreparar + $pedidosEmpacados + $pedidosEnviados + $pedidosEntregados;
 @endphp
 <div class="store-dashboard">
@@ -42,6 +41,7 @@
                     <a href="{{ route('pagos.index') }}" class="store-action-tile"><span class="store-action-icon tile-yellow"><svg class="ui-icon"><use href="#ui-wallet" /></svg></span><span><strong>Registrar cobro</strong><small>Abonos y saldos</small></span><svg class="ui-icon store-action-arrow"><use href="#ui-arrow" /></svg></a>
                     <a href="{{ route('entregas.listar') }}" class="store-action-tile"><span class="store-action-icon tile-blue"><svg class="ui-icon"><use href="#ui-truck" /></svg></span><span><strong>Preparar entrega</strong><small>Organiza los envíos</small></span><svg class="ui-icon store-action-arrow"><use href="#ui-arrow" /></svg></a>
                 </div>
+                <a class="store-text-action" href="{{ route('clientes.index') }}">Ver todos los clientes <svg class="ui-icon"><use href="#ui-arrow" /></svg></a>
             </section>
         </div>
         <aside class="store-workspace-side" aria-label="Información adicional de la tienda">

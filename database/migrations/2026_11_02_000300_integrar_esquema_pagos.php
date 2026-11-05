@@ -26,7 +26,8 @@ return new class extends Migration
         if (Schema::hasColumn('pagos', 'anulado_en')) {
             $saldos->whereNull('pagos.anulado_en');
         }
-        if ($saldos->groupBy('pagos.pedido_id', 'pedidos.total')->havingRaw('SUM('.$columna.') > '.$gramatica->wrap('pedidos.total'))->exists()) {
+        // Seleccionar solo una columna agrupada: SELECT * es inválido con ONLY_FULL_GROUP_BY.
+        if ($saldos->select('pagos.pedido_id')->groupBy('pagos.pedido_id', 'pedidos.total')->havingRaw('SUM('.$columna.') > '.$gramatica->wrap('pedidos.total'))->exists()) {
             throw new RuntimeException('Hay abonos que superan el total del pedido; conciliar antes de integrar.');
         }
         Schema::table('pagos', function (Blueprint $tabla) {

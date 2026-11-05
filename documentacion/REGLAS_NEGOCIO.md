@@ -1,5 +1,7 @@
 # Reglas de negocio
 
+> Estado implementado al 2026-11-03: permisos por rol, correcciones/anulaciones y reembolsos existen en main. Venta = pedido confirmado, entregado y completamente pagado; fecha = última de confirmación, entrega y verificación que completa el pago. Cobro neto = cobros verificados menos reembolsos por fecha. La aceptación formal de reglas y roles debe adjuntarse; las preguntas históricas inferiores no significan módulos ausentes. Ver MANUAL_USUARIO.md, CORRECCIONES_PAGOS.md y ENTREGA_FINAL.md.
+
 ## Fuente confirmada: definición del negocio
 
 Tres usuarios internos. Código corto manual. Depósito previo confirmado produce reserva firme; contra entrega produce temporal. Ambas retiran disponibilidad. Cancelación devuelve inventario según el documento. Pago pendiente/parcial/pagado separado de logística: empacado, Forza/mensajería propia y entregado. Reportes por día/semana/mes y costos/ganancias.

@@ -1,5 +1,7 @@
 # PRD inicial → Babybu Toys
 
+> Estado de cierre (2026-11-03): este documento conserva el levantamiento inicial. RF01–RF12 tienen implementación; roles, devolución física, correcciones/reembolsos y despliegue se ampliaron posteriormente. Consultar CHECKLIST.md, MANUAL_USUARIO.md y ENTREGA_FINAL.md. La plantilla del curso y aprobación formal del negocio siguen por adjuntar.
+
 Borrador pendiente de validación del negocio. No sustituye la plantilla del curso aún no proporcionada.
 
 ## Problema y objetivo

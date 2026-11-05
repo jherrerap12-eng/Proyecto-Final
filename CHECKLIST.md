@@ -1,64 +1,49 @@
-# Cumplimiento y estado real
+﻿# Checklist de cierre
 
-Actualizado: 2026-11-01. Código escrito no equivale a validación del negocio ni a evidencia académica completa.
+Actualizado: 2026-11-03. Distingue implementación, confirmación del encargado y evidencia adjunta.
 
-## Sprint 1
+## Desarrollo e integración
 
-- [x] Lectura de PDF y revisión del entorno/repositorio.
-- [x] Estructura oficial Laravel 12 creada.
-- [x] PRD, reglas, arquitectura y DER conceptual iniciales redactados.
-- [ ] Validación del negocio y dudas críticas resueltas.
-- [ ] Incorporar plantilla PRD del curso, no recibida.
-- [x] Código inicial de autenticación y plantilla Bootstrap.
-- [x] Dependencias, compilación y pruebas verificadas: consultar registro.
-- [x] Repositorio local exclusivo inicializado, sin commits ni remoto.
-- [x] Conexión local configurada y tres migraciones iniciales verificadas sobre `babybu_toys` (servidor de XAMPP/MariaDB).
-- [ ] Tres cuentas reales creadas localmente.
-- [x] Primera cuenta creada; el encargado confirmó que el inicio y cierre de sesión funcionan en navegador.
-- [ ] Primer estado estable revisado y commit autorizado.
-- [ ] Repositorio exclusivo publicado y compañero invitado.
-- [ ] Ramas feature/inventario y feature/clientes desde main actualizado.
-- [ ] GitHub Projects con responsables, cinco columnas e historial real.
-- [ ] Instalación reproducida por el compañero.
+- [x] Autenticación, cierre, límite de intentos y recuperación técnica.
+- [x] Usuarios, roles, desactivación y cambio de contraseña.
+- [x] Inventario por pieza con historial y protección de concurrencia.
+- [x] Clientes con búsqueda, edición y baja lógica.
+- [x] Pedidos, precios históricos y reservas con mínimo verificado del 25 %.
+- [x] Pagos, verificación, saldos, corrección y anulación con historial.
+- [x] Cancelación, regreso físico y reembolsos parciales/totales.
+- [x] Empaque, envío, entrega y responsables.
+- [x] Dashboard y reportes con criterio único de venta y CSV.
+- [x] Filtros, paginación y búsqueda Fetch en pedidos.
+- [x] Ajustes visuales de botones, tablas y dashboard.
+- [x] Integración de ramas y publicación del repositorio.
 
-## Sprint 2 — inventario implementado; integración y clientes pendientes
+## Verificación y despliegue
 
-- [x] Productos: código manual único por pieza física, costos y precios.
-- [x] Existencias 0/1 y movimientos con motivo/responsable; protección transaccional.
-- [x] Búsqueda, filtros, paginación y pruebas de inventario.
-- [x] Revisión visual de listado, formulario y ficha a 1280/360 px, con vistas ficticias en memoria.
-- [ ] Clientes: CRUD, formularios, validaciones, búsquedas y pruebas.
-  - Código implementado en `feature/clientes`, con pruebas SQLite correctas. Pendientes: validar campos con el negocio, aplicar migración local, comprobar MySQL/MariaDB y revisar navegador/móvil. Ver `documentacion/CLIENTES.md`.
-- [ ] Permisos por operación acordados.
-  - Propuesta de tres roles implementada y probada en `feature/usuarios-permisos` (Persona 4): alta/edición/desactivación de cuentas, cambio seguro de contraseña, permisos en servidor. Pendiente: aprobación del negocio y PR. Ver `documentacion/USUARIOS_Y_PERMISOS.md`.
-- [ ] Revisión móvil y PR documentados.
+- [x] Última suite registrada: 139 pruebas y 1231 aserciones correctas.
+- [x] Reportes comprobados en MariaDB tras actualizar el escenario.
+- [x] Quince escenarios concurrentes financieros comprobados en MariaDB.
+- [x] Revisión manual confirmada por el encargado.
+- [x] Render Docker + Aiven MySQL publicados; funcionamiento confirmado.
+- [x] Compatibilidad de consulta de migración con ONLY_FULL_GROUP_BY corregida.
+- [x] Acceso al CA para Apache corregido sin desactivar SSL.
+- [ ] Adjuntar evidencia detallada de pruebas en línea por rol y dispositivo.
+- [ ] Adjuntar registro de respaldo/restauración y confirmar responsable/frecuencia.
+- [ ] Documentar un volumen objetivo y resultados de rendimiento del dashboard.
 
-## Sprints 3–6 → pendientes
+El encargado indicó completadas las tareas posteriores al despliegue; no se inventan aquí conteos de cuentas, archivos de respaldo ni resultados de restauración que no están adjuntos.
 
-- [x] Pedidos/reservas implementados y probados en feature/pedidos; concurrencia comprobada en MariaDB local. Revisión/PR pendientes; MySQL 8 no probado.
-- [x] Cancelación/regreso integrados con empaque/envío/entrega en feature/entregas, con fechas/responsables; pendiente validación manual y PR.
-- [x] Interfaz de pagos/verificación integrada en main mediante PR #3 (42fcffb), con pedidos/reservas.
-- [x] Migración puente preserva pagos legacy sin verificación automática; pruebas SQLite y MariaDB aprobadas.
-- [ ] Pagos, correcciones y saldos; logística completa.
-- [x] Reportes diarios/semanales/mensuales con ventas pagadas/cobros/ganancia bruta diferenciados, filtros, paginación y CSV implementados en `feature/reportes`. Revisión manual, PR y aprobación pendientes; ver `documentacion/REPORTES.md`.
-- [x] Logística de paquete completo implementada/probada en feature/entregas. Publicación/PR pendientes.
-- [ ] Correcciones/anulaciones de pagos, reembolsos y permisos según reglas por acordar.
-  - Correcciones y anulaciones con historial y protección del mínimo de reserva firme implementadas y probadas en `feature/correcciones-pagos` (Persona 4). Reembolsos parciales/totales implementados en `feature/reembolsos-ventas`. Pendientes: PR y prueba concurrente MySQL/MariaDB. Ver `documentacion/CORRECCIONES_PAGOS.md`.
-- [ ] Reportes diarios/semanales/mensuales con ventas/cobros/ganancia diferenciados.
-- [ ] Filtros, paginación y Fetch útil.
-- [ ] Seguridad y pruebas integrales; DER final.
-- [ ] Despliegue por Internet y respaldo/restauración.
-- [ ] Participación/dominio de cinco estudiantes exigidos por la guía.
-- [ ] Defensa y evidencia auténtica de gestión.
+## Documentación y aceptación
 
-## Condicionados y evidencias
+- [x] README y backlog actualizados al estado integrado.
+- [x] Manual de usuario redactado.
+- [x] DER final basado en las migraciones.
+- [x] Guía de despliegue, operación y recuperación redactada.
+- [x] Guion de defensa y matriz de evidencias preparados.
+- [ ] Adjuntar capturas propias y exportar el DER si lo requiere la entrega.
+- [ ] Completar PRD con plantilla del curso y aprobación formal del negocio.
+- [ ] Registrar aceptación de matriz de permisos y reglas financieras.
+- [ ] Incorporar nombres/carnés, docente, sección y responsabilidades reales.
+- [ ] Enlazar tablero, historias, revisiones y participación exigida por la guía.
+- [ ] Preparar diapositivas y ensayar la defensa según tiempo del docente.
 
-API REST independiente y CI/CD no son obligaciones universales de la guía. Trabajar dos inicialmente no elimina el requisito académico de cinco integrantes. Base publicada en el commit inicial `a4c5fed`; el encargado validó inventario y autorizó su commit/publicación en rama. PR, revisión de otro integrante, invitaciones, tablero y despliegue siguen sin acreditarse aquí. Ver `documentacion/VERIFICACION.md` para resultados técnicos reales.
-
-## Cierre de pendientes del equipo — 2026-11-02 (Persona 4, rama `feature/reembolsos-ventas`)
-
-- [x] Reembolsos con regla acordada (parcial o total, cancelados, tras regreso físico, solo administrador).
-- [x] Criterio único de venta: entregada y pagada, compartido por panel y reportes; cobro neto descuenta reembolsos.
-- [x] Pruebas finales de integración por rol (`tests/Feature/FlujoCompletoTest.php`): recorridos completos con rechazos, cancelación tras envío, regreso físico, reembolso, corrección y desactivación de cuenta.
-- [ ] PR revisado por otro integrante y prueba manual en navegador.
-
+Ver [ENTREGA_FINAL.md](documentacion/ENTREGA_FINAL.md). No son obligatorios por defecto API independiente, CI/CD, tienda pública o integraciones bancarias; cualquier ampliación requiere alcance acordado.

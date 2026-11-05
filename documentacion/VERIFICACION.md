@@ -1,5 +1,13 @@
 # Verificación real
 
+## Revisión de reportes y concurrencia financiera — 2026-11-03
+
+Rama `fix/verificacion-financiera`, desde main `e255f09`. Se reprodujo el fallo de `verificar_reportes.php`: faltaba `pedidos.estado_logistico` y no se aislaban `envios`/`reembolsos`. El script ahora usa cinco tablas temporales con los campos actuales, comprueba la fecha de entrega, excluye pagados sin entregar y contrasta reembolsos/cobro neto y CSV. Pasa en MariaDB 10.4.32 con Q100.30 de ventas y Q230.30 de cobro neto en el escenario controlado.
+
+Nuevo `tests/Integracion/verificar_concurrencia_financiera.php`: quince escenarios reales con dos conexiones independientes por caso, barreras y detección explícita de contención `NOWAIT` bajo `REPEATABLE READ`. Cubre correcciones, anulaciones, verificación, cancelación, reembolsos, reenvíos y límites agregados. Se corrigieron las comprobaciones de reservas en `CorregirPago` y `RegistrarReembolso` para evitar snapshots anteriores a una operación concurrente ya confirmada. La prueba detectó y reprodujo la pérdida del mínimo de reserva antes de la corrección.
+
+Suite completa: 139 pruebas/1231 aserciones correctas en SQLite. La verificación financiera usa clones InnoDB, con limpieza al terminar; no modifica datos reales. Evidencia MariaDB local; no se acredita ejecución en MySQL 8, revisión por otro integrante ni publicación de estos cambios.
+
 ## Entregas — 2026-11-02
 
 Main integrado 42fcffb y origin/main coincidían; base limpia. Feature/entregas creada localmente sin commits/publicación. Base: 52 pruebas/517 comprobaciones.
