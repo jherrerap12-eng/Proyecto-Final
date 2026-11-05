@@ -2,18 +2,16 @@
 
 namespace Tests\Feature;
 
-// use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 class ExampleTest extends TestCase
 {
-    /**
-     * A basic test example.
-     */
-    public function test_the_application_returns_a_successful_response(): void
+    public function test_the_public_homepage_is_available_without_login(): void
     {
-        $response = $this->get('/');
-
-        $response->assertRedirect(route('login'));
+        $this->get('/')
+            ->assertOk()
+            ->assertSee('Babybu Toys')
+            ->assertSee('Iniciar sesión')
+            ->assertSee('Mira nuestros videos');
     }
 }
