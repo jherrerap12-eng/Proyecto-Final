@@ -171,4 +171,31 @@ class InventarioTest extends TestCase
         $this->assertSame('« Anterior', __('pagination.previous'));
         $this->assertSame('Mostrando', __('Showing'));
     }
+
+    public function test_nueva_pieza_copia_catalogo_sin_codigo_reservas_ni_stock_del_original(): void
+    {
+        $this->actingAs(User::factory()->create());
+        $original = $this->registrar(['existencias' => 0]);
+        $this->get(route('inventario.crear', ['copiar_de' => $original->id]))
+            ->assertOk()->assertSee('asigna un código diferente')
+            ->assertViewHas('producto', fn ($pieza) => ! $pieza->exists && $pieza->codigo === null
+                && $pieza->nombre === $original->nombre && $pieza->costo === $original->costo);
+        $nueva = $this->registrar(['codigo' => 'BB-NUEVA']);
+        $this->assertSame(0, $original->refresh()->existencias);
+        $this->assertSame(1, $nueva->existencias);
+        $this->assertDatabaseHas('movimientos_inventario', ['producto_id' => $nueva->id, 'tipo' => 'apertura', 'cantidad' => 1]);
+    }
+
+    public function test_formulario_muestra_solo_el_movimiento_fisicamente_posible(): void
+    {
+        $this->actingAs(User::factory()->create());
+        $pieza = $this->registrar();
+        $this->get(route('inventario.mostrar', $pieza))->assertOk()
+            ->assertSee('Salida de esta pieza')->assertDontSee('Entrada de esta pieza');
+        $this->post(route('inventario.ajustar', $pieza), $this->movimiento())->assertSessionHasNoErrors();
+        $this->get(route('inventario.mostrar', $pieza))->assertOk()
+            ->assertSee('Entrada de esta pieza')->assertDontSee('Salida de esta pieza');
+        // Cambiar el HTML no permite violar la regla del servidor.
+        $this->post(route('inventario.ajustar', $pieza), $this->movimiento())->assertSessionHasErrors('cantidad');
+    }
 }

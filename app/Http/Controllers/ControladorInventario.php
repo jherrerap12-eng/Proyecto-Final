@@ -22,7 +22,7 @@ class ControladorInventario extends Controller
             'existencias' => ['nullable', Rule::in(['con', 'sin', 'todas'])],
             'page' => ['nullable', 'integer', 'min:1'],
         ]);
-        $consulta = Producto::with('reservaActual');
+        $consulta = Producto::with('reservaActual.pedido');
         $estado = $filtros['estado'] ?? 'activos';
         if ($estado !== 'todos') {
             $consulta->where('activo', $estado === 'activos');
@@ -34,7 +34,7 @@ class ControladorInventario extends Controller
             });
         }
         if (($filtros['existencias'] ?? '') === 'con') {
-            $consulta->where('existencias', '>', 0)->whereDoesntHave('reservaActual');
+            $consulta->where('activo', true)->where('existencias', '>', 0)->whereDoesntHave('reservaActual');
         } elseif (($filtros['existencias'] ?? '') === 'sin') {
             $consulta->where('existencias', 0);
         }
@@ -43,9 +43,14 @@ class ControladorInventario extends Controller
         return view('inventario.listado', compact('productos', 'filtros'));
     }
 
-    public function crear(): View
+    public function crear(Request $solicitud): View
     {
-        return view('inventario.formulario', ['producto' => new Producto]);
+        $datos = $solicitud->validate(['copiar_de' => ['nullable', 'integer', 'exists:productos,id']]);
+        $origen = isset($datos['copiar_de']) ? Producto::findOrFail($datos['copiar_de']) : null;
+        // Solo copiar datos de catálogo; código, stock, reservas e historial son nuevos.
+        $producto = new Producto($origen?->only(['nombre', 'descripcion', 'costo', 'precio']) ?? []);
+
+        return view('inventario.formulario', compact('producto', 'origen'));
     }
 
     public function guardar(SolicitudProducto $solicitud, GestionarInventario $inventario): RedirectResponse
@@ -57,7 +62,7 @@ class ControladorInventario extends Controller
 
     public function mostrar(Producto $producto): View
     {
-        $producto->load('reservaActual');
+        $producto->load('reservaActual.pedido');
         $movimientos = $producto->movimientos()->with('usuario')->orderByDesc('id')->paginate(15);
         $referencia = (string) Str::uuid();
 

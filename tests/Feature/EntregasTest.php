@@ -66,6 +66,52 @@ class EntregasTest extends TestCase
         $pedido->refresh();
     }
 
+    public function test_archivar_entregada_conserva_pedido_reserva_y_stock_y_permite_regreso_posterior(): void
+    {
+        $pedido = $this->pedido();
+        $this->empacar($pedido);
+        $this->enviar($pedido);
+        $this->post(route('entregas.entregar', $pedido), ['version' => $pedido->version, 'confirmar_entrega' => 1])->assertSessionHasNoErrors();
+        $pedido->refresh();
+        $pieza = Producto::firstOrFail();
+        $reserva = $pieza->reservaActual;
+        $versionPedido = $pedido->version;
+        $movimientos = $pieza->movimientos()->count();
+        $this->get(route('inventario.mostrar', $pieza))->assertOk()->assertSee('Archivar pieza entregada');
+        $this->get(route('inventario.listar'))->assertOk()->assertSee('Entregada')->assertDontSee('Reserva temporal');
+        $this->patch(route('inventario.estado', $pieza), ['activo' => 0, 'version' => $pieza->version])->assertSessionHasNoErrors();
+        $this->assertFalse($pieza->refresh()->activo);
+        $this->assertSame(0, $pieza->existencias);
+        $this->assertSame($pieza->id, $reserva->refresh()->producto_bloqueado_id);
+        $this->assertSame($versionPedido, $pedido->refresh()->version);
+        $this->assertSame('entregado', $pedido->estado_logistico);
+        $this->assertSame($movimientos, $pieza->movimientos()->count());
+        $this->get(route('inventario.listar'))->assertDontSee($pieza->codigo);
+        $this->get(route('inventario.listar', ['estado' => 'inactivos']))->assertSee($pieza->codigo)->assertSee('Entregada');
+        app(GestionarPedidos::class)->cancelar($pedido, $pedido->version, 'Regreso posterior al archivo', $this->usuario);
+        $pieza->refresh()->load('reservaActual.pedido');
+        $this->assertSame('Pendiente de regreso', $pieza->situacionInventario());
+        app(GestionarPedidos::class)->confirmarDevolucion($pedido->refresh(), $this->usuario);
+        $this->assertSame(1, $pieza->refresh()->existencias);
+        $this->assertFalse($pieza->activo);
+        $this->assertNull($pieza->reservaActual()->first());
+        $this->patch(route('inventario.estado', $pieza), ['activo' => 1, 'version' => $pieza->version])->assertSessionHasNoErrors();
+        $this->assertSame('Disponible', $pieza->refresh()->situacionInventario());
+    }
+
+    public function test_pieza_reservada_o_enviada_no_se_puede_archivar(): void
+    {
+        $pedido = $this->pedido();
+        $pieza = Producto::firstOrFail();
+        $this->patch(route('inventario.estado', $pieza), ['activo' => 0, 'version' => $pieza->version])->assertSessionHasErrors('version');
+        $this->empacar($pedido);
+        $this->enviar($pedido);
+        $this->get(route('inventario.listar'))->assertOk()->assertSee('Enviada');
+        $this->patch(route('inventario.estado', $pieza), ['activo' => 0, 'version' => $pieza->refresh()->version])->assertSessionHasErrors('version');
+        $this->assertTrue($pieza->refresh()->activo);
+        $this->assertNotNull($pieza->reservaActual);
+    }
+
     public function test_rutas_exigen_sesion(): void
     {
         auth()->logout();

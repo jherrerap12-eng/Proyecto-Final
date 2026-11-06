@@ -4,11 +4,11 @@
 <a href="{{ route('inventario.listar') }}" class="text-decoration-none">← Volver al inventario</a>
 <div class="d-flex flex-wrap justify-content-between gap-3 mt-3 mb-4">
     <div><span class="insignia-marca mb-2">{{ $producto->codigo }}</span><h1 class="fw-bold">{{ $producto->nombre }}</h1></div>
-    <div><a class="btn btn-outline-primary" href="{{ route('inventario.editar', $producto) }}">Editar datos</a></div>
+    <div class="d-flex flex-wrap gap-2 align-items-start"><a class="btn btn-outline-primary" href="{{ route('inventario.editar', $producto) }}">Editar datos</a><a class="btn btn-primary" href="{{ route('inventario.crear', ['copiar_de' => $producto->id]) }}">Registrar otra pieza igual</a></div>
 </div>
 @include('inventario.errores')
 @if ($producto->reservaActual)
-<div class="alert alert-warning">Pieza apartada en el <a href="{{ route('pedidos.mostrar', $producto->reservaActual->pedido_id) }}">pedido #{{ $producto->reservaActual->pedido_id }}</a>. Gestiona allí su reserva o devolución.</div>
+<div class="alert alert-info">{{ $producto->situacionInventario() }} · <a href="{{ route('pedidos.mostrar', $producto->reservaActual->pedido_id) }}">Pedido #{{ $producto->reservaActual->pedido_id }}</a>. El vínculo se conserva para proteger el historial. Gestiona cualquier cancelación o regreso desde el pedido.</div>
 @endif
 @if (! $producto->activo)<div class="alert alert-secondary">Esta pieza está inactiva. Su historial se conserva y no admite movimientos hasta reactivarla.</div>@endif
 <div class="row g-4">
@@ -20,21 +20,27 @@
                     <dt class="col-sm-5">Costo</dt><dd class="col-sm-7">Q {{ number_format((float) $producto->costo, 2) }}</dd>
                     <dt class="col-sm-5">Precio de venta</dt><dd class="col-sm-7">Q {{ number_format((float) $producto->precio, 2) }}</dd>
                     <dt class="col-sm-5">Existencia</dt><dd class="col-sm-7">{{ $producto->existencias ? '1 pieza en inventario' : 'Sin existencia' }}</dd>
-                    <dt class="col-sm-5">Estado</dt><dd class="col-sm-7">{{ $producto->activo ? 'Activo' : 'Inactivo' }}</dd>
+                    <dt class="col-sm-5">Situación</dt><dd class="col-sm-7">{{ $producto->situacionInventario() }}</dd>
+                    <dt class="col-sm-5">Estado del registro</dt><dd class="col-sm-7">{{ $producto->activo ? 'Activo' : 'Inactivo' }} · No indica disponibilidad para venta.</dd>
                     <dt class="col-sm-5">Descripción</dt><dd class="col-sm-7 text-break">{{ $producto->descripcion ?: 'Sin descripción.' }}</dd>
                 </dl>
             </div>
         </section>
         <section class="card border-0 shadow-sm rounded-4">
             <div class="card-body p-4">
-                <h2 class="h5">{{ $producto->activo ? 'Desactivar pieza' : 'Reactivar pieza' }}</h2>
+                <h2 class="h5">{{ $producto->activo ? ($producto->esEntregadaArchivable() ? 'Archivar pieza entregada' : 'Desactivar pieza') : 'Reactivar pieza' }}</h2>
                 <p class="text-secondary small">Desactivar conserva código, existencias e historial. Puedes encontrar la pieza usando el filtro de inactivos.</p>
+                @if ($producto->activo && $producto->reservaActual && ! $producto->esEntregadaArchivable())
+                    <p class="text-secondary mb-0">No se puede desactivar mientras esté reservada, en envío o pendiente de regreso. Gestiona primero el pedido.</p>
+                @else
+                @if ($producto->esEntregadaArchivable())<p class="small text-secondary">Archivar la oculta del listado de activos. No modifica el pedido, el saldo, la entrega ni las existencias; tampoco la vuelve disponible. Si regresa físicamente después, seguirá inactiva hasta que la reactives.</p>@endif
                 <form method="POST" action="{{ route('inventario.estado', $producto) }}" data-envio-unico>
                     @csrf @method('PATCH')
                     <input type="hidden" name="activo" value="{{ $producto->activo ? 0 : 1 }}">
                     <input type="hidden" name="version" value="{{ $producto->version }}">
-                    <button type="submit" class="btn btn-outline-secondary">{{ $producto->activo ? 'Desactivar pieza' : 'Reactivar pieza' }}</button>
+                    <button type="submit" class="btn btn-outline-secondary">{{ $producto->activo ? ($producto->esEntregadaArchivable() ? 'Archivar pieza entregada' : 'Desactivar pieza') : 'Reactivar pieza' }}</button>
                 </form>
+                @endif
             </div>
         </section>
     </div>
@@ -43,6 +49,7 @@
             <div class="card-body p-4">
                 <h2 class="h5">Registrar movimiento</h2>
                 <p class="text-secondary small">Entradas y salidas manuales de esta pieza. Los envíos y regresos de pedidos se registran desde su seguimiento.</p>
+                <p class="small text-secondary">¿Llegó otro juguete igual? Usa «Registrar otra pieza igual» y un código nuevo. Aquí solo se ajusta esta pieza individual.</p>
                 @if (auth()->user()->cannot('ajustar-inventario'))
                     <p class="text-secondary mb-0">Tu rol no permite ajustes manuales de inventario. Solicítalo a un supervisor o administrador.</p>
                 @elseif ($producto->activo && ! $producto->reservaActual)
@@ -53,8 +60,11 @@
                     <div class="mb-3">
                         <label for="tipo" class="form-label">Operación</label>
                         <select id="tipo" name="tipo" class="form-select" required>
-                            <option value="entrada" @selected(old('tipo', $producto->existencias ? 'salida' : 'entrada') === 'entrada')>Entrada de la pieza (+1)</option>
-                            <option value="salida" @selected(old('tipo', $producto->existencias ? 'salida' : 'entrada') === 'salida')>Salida de la pieza (−1)</option>
+                            @if ($producto->existencias === 0)
+                            <option value="entrada">Entrada de esta pieza (+1)</option>
+                            @else
+                            <option value="salida">Salida de esta pieza (−1)</option>
+                            @endif
                         </select>
                     </div>
                     <div class="mb-3">

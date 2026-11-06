@@ -3,6 +3,7 @@
 namespace App\Acciones\Inventario;
 
 use App\Models\MovimientoInventario;
+use App\Models\Pedido;
 use App\Models\Producto;
 use App\Models\User;
 use Illuminate\Database\UniqueConstraintViolationException;
@@ -77,9 +78,18 @@ class GestionarInventario
     public function cambiarEstado(Producto $producto, bool $activo, int $version): void
     {
         DB::transaction(function () use ($producto, $activo, $version) {
+            // Coincidir con logística: pedido → pieza → reserva. Archivar no libera nada.
+            $pedidoId = $producto->reservaActual()->value('pedido_id');
+            $pedido = $pedidoId ? Pedido::whereKey($pedidoId)->lockForUpdate()->first() : null;
             $producto = Producto::whereKey($producto->id)->lockForUpdate()->firstOrFail();
             $this->comprobarVersion($producto, $version);
-            if (! $activo && $producto->reservaActual()->lockForUpdate()->first()) {
+            $reserva = $producto->reservaActual()->lockForUpdate()->first();
+            if ($reserva && (int) $reserva->pedido_id !== (int) $pedidoId) {
+                throw ValidationException::withMessages(['version' => 'Cambió la reserva de la pieza. Recarga la página.']);
+            }
+            $entregada = $reserva && $reserva->estado === 'activa' && $producto->existencias === 0
+                && $pedido?->estado === 'confirmado' && $pedido?->estado_logistico === 'entregado';
+            if (! $activo && $reserva && ! $entregada) {
                 throw ValidationException::withMessages(['version' => 'No puedes desactivar una pieza reservada. Gestiona primero el pedido.']);
             }
             $producto->activo = $activo;

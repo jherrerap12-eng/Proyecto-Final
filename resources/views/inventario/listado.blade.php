@@ -44,14 +44,14 @@
     <div class="table-responsive">
         <table class="table table-hover align-middle mb-0">
             <caption class="visually-hidden">Inventario de piezas individuales</caption>
-            <thead class="table-light"><tr><th scope="col">Código / juguete</th><th scope="col">Costo</th><th scope="col">Precio</th><th scope="col">Existencia</th><th scope="col">Estado</th><th scope="col">Acciones</th></tr></thead>
+            <thead class="table-light"><tr><th scope="col">Código / juguete</th><th scope="col">Costo</th><th scope="col">Precio</th><th scope="col">Situación / existencia física</th><th scope="col">Estado del registro</th><th scope="col">Acciones</th></tr></thead>
             <tbody>
             @forelse ($productos as $producto)
                 <tr>
                     <td><a class="fw-bold" href="{{ route('inventario.mostrar', $producto) }}">{{ $producto->codigo }}</a><div>{{ $producto->nombre }}</div></td>
                     <td class="text-nowrap">Q {{ number_format((float) $producto->costo, 2) }}</td>
                     <td class="text-nowrap">Q {{ number_format((float) $producto->precio, 2) }}</td>
-                    <td>@if ($producto->reservaActual)<span class="badge text-bg-warning">{{ $producto->reservaActual->estado === 'devolucion_pendiente' ? 'Pendiente de regreso' : 'Reserva '.$producto->reservaActual->tipo }}</span>@else<span class="badge {{ $producto->existencias ? 'text-bg-success' : 'text-bg-secondary' }}">{{ $producto->existencias ? '1 pieza' : 'Sin existencia' }}</span>@endif</td>
+                    <td><span class="badge {{ $producto->reservaActual ? ($producto->situacionInventario() === 'Entregada' ? 'text-bg-secondary' : 'text-bg-warning') : ($producto->activo && $producto->existencias ? 'text-bg-success' : 'text-bg-secondary') }}">{{ $producto->situacionInventario() }}</span><div class="small text-secondary mt-1">{{ $producto->existencias }} pieza(s) en bodega</div></td>
                     <td>{{ $producto->activo ? 'Activo' : 'Inactivo' }}</td>
                     <td class="text-nowrap"><a class="btn btn-outline-primary btn-sm" href="{{ route('inventario.mostrar', $producto) }}">Ver pieza</a></td>
                 </tr>

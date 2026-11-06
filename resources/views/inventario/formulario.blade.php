@@ -4,6 +4,9 @@
 <a href="{{ $producto->exists ? route('inventario.mostrar', $producto) : route('inventario.listar') }}" class="text-decoration-none">← Volver</a>
 <h1 class="fw-bold mt-3">{{ $producto->exists ? 'Editar juguete' : 'Registrar juguete' }}</h1>
 <p class="text-secondary">Cada pieza lleva un código manual único, incluso si tienes juguetes iguales.</p>
+@if ($origen ?? null)
+<div class="alert alert-info">Nueva pieza basada en {{ $origen->codigo }}. Revisa sus datos y asigna un código diferente. No se copian reservas ni movimientos.</div>
+@endif
 @include('inventario.errores')
 <form method="POST" action="{{ $producto->exists ? route('inventario.actualizar', $producto) : route('inventario.guardar') }}" class="card border-0 shadow-sm rounded-4" data-envio-unico>
     @csrf

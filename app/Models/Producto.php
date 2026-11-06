@@ -27,4 +27,33 @@ class Producto extends Model
     {
         return $this->hasOne(Reserva::class, 'producto_bloqueado_id');
     }
+
+    public function situacionInventario(): string
+    {
+        $reserva = $this->reservaActual;
+        if ($reserva) {
+            if ($reserva->estado === 'devolucion_pendiente') {
+                return 'Pendiente de regreso';
+            }
+            $estado = $reserva->pedido?->estado_logistico;
+            if ($estado === 'entregado') {
+                return 'Entregada';
+            }
+            if ($estado === 'enviado') {
+                return 'Enviada';
+            }
+
+            return 'Reserva '.$reserva->tipo;
+        }
+
+        return $this->existencias === 1 ? ($this->activo ? 'Disponible' : 'En bodega') : 'Sin existencia';
+    }
+
+    public function esEntregadaArchivable(): bool
+    {
+        return $this->existencias === 0
+            && $this->reservaActual?->estado === 'activa'
+            && $this->reservaActual?->pedido?->estado === 'confirmado'
+            && $this->reservaActual?->pedido?->estado_logistico === 'entregado';
+    }
 }

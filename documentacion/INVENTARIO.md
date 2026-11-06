@@ -13,6 +13,18 @@ Rama: `feature/inventario`. Cada pieza física tiene código manual único, incl
 - `resources/views/inventario/`: listado, formulario, detalle/historial y errores.
 - Cambios compartidos: una inclusión en web.php, enlace Inventario/ajuste responsive en plantilla, acceso desde panel y traducciones. Coordinar con clientes para conservar ambos enlaces y grupos de rutas al integrar.
 
+## Actualización de QA de noviembre de 2026
+
+La situación comercial se muestra separada de la existencia física y del estado activo/inactivo. Una pieza entregada indica «Entregada» aunque conserve su vínculo con el pedido; no se presenta como reserva disponible. Las enviadas y las pendientes de regreso también se distinguen.
+
+Una pieza entregada con existencia cero puede archivarse desde su ficha: queda inactiva sin modificar reserva, pedido, pagos ni movimientos. No se permite archivar una reserva en preparación, una pieza enviada ni una devolución pendiente. Si posteriormente se cancela el pedido y la pieza regresa, se conserva inactiva hasta reactivarla explícitamente. Reactivar no elimina el bloqueo comercial.
+
+El formulario de movimientos ofrece solo la operación posible para la pieza: salida si existe o entrada si está en cero, siempre que esté activa y no tenga reserva. El servidor mantiene la validación 0/1. «Registrar otra pieza igual» copia nombre, descripción, costo y precio a un alta nueva y exige otro código; no copia stock, reservas ni historial.
+
+Se registraron diez juguetes distintos de demostración en Aiven bajo códigos DEMO-001 a DEMO-010 por solicitud del encargado, cada uno con apertura y responsable. Precios de ejemplo Q45–Q220; no se alteraron las cuatro piezas anteriores. No son un catálogo real ni se cargan automáticamente en instalaciones nuevas.
+
+Las secciones inferiores conservan el registro histórico de la primera entrega; los módulos relacionados ya están integrados.
+
 ## Cómo usarlo
 
 Iniciar sesión → Inventario → Registrar juguete. Introducir código, nombre, descripción opcional, costo, precio y existencia inicial. El alta con existencia 1 genera apertura con responsable. Alta con 0 no crea un movimiento ficticio.
